@@ -21,18 +21,19 @@ package nl.escay.javaitunesapi.itunes;
 
 /**
  * Any window
+ * 
+	contained by application.
+	
+	bounds (rectangle) : the boundary rectangle for the window
+	closeable (boolean, r/o) : does the window have a close box?
+	collapseable (boolean, r/o) : does the window have a collapse (windowshade) box?
+	collapsed (boolean) : is the window collapsed?
+	position (point) : the upper left position of the window
+	resizable (boolean, r/o) : is the window resizable?
+	visible (boolean) : is the window visible?
+	zoomable (boolean, r/o) : is the window zoomable?
+	zoomed (boolean) : is the window zoomed?
  */
 public class Window extends Item {
-	
-//	contained by application.
-//	
-//	bounds (rectangle) : the boundary rectangle for the window
-//	closeable (boolean, r/o) : does the window have a close box?
-//	collapseable (boolean, r/o) : does the window have a collapse (windowshade) box?
-//	collapsed (boolean) : is the window collapsed?
-//	position (point) : the upper left position of the window
-//	resizable (boolean, r/o) : is the window resizable?
-//	visible (boolean) : is the window visible?
-//	zoomable (boolean, r/o) : is the window zoomable?
-//	zoomed (boolean) : is the window zoomed?
+
 }

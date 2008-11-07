@@ -19,7 +19,13 @@
 
 package nl.escay.javaitunesapi.itunes;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.script.ScriptException;
+
+import nl.escay.javaitunesapi.utils.CommandUtil;
+import nl.escay.javaitunesapi.utils.ConvertUtil;
 
 /**
  * A music source (music library, CD, device, etc.)
@@ -34,6 +40,7 @@ import java.util.List;
 	kind (library/iPod/audio CD/MP3 CD/device/radio tuner/shared library/unknown, r/o)
  */
 public class Source extends Item {
+	
 	private List<AudioCDPlaylist> audioCDPlaylists;
 	private List<DevicePlaylist> devicePlayLists;
 	private List<LibraryPlaylist> libraryPlaylists;
@@ -54,8 +61,28 @@ public class Source extends Item {
 	}
 	
 	public List<Playlist> getPlaylists() {
+		playlists = new ArrayList<Playlist>();
+		Integer nrOfPlaylists = getNumberOfPlaylists();
+		if (nrOfPlaylists != null) {
+			int i = 1; // TODO: document it starts at 1... not 0!
+			while (i <= nrOfPlaylists) {
+				playlists.add(new Playlist(i));
+				i++;
+			}
+		}
 		return playlists;
 	}
+	
+    private Integer getNumberOfPlaylists() {
+    	String command = "tell application \"iTunes\"\nget count of playlists\nend tell";
+    	Object result = null;
+    	try {
+    		result = CommandUtil.getScriptEngine().eval(command);
+    	} catch (ScriptException ex) {
+    		ex.printStackTrace();
+    	}
+    	return ConvertUtil.convertToInteger(result);
+    }
 	
 	public List<RadioTunerPlaylist> getRadioTunerPlaylists() {
 		return radioTunerPlaylists;

@@ -23,6 +23,13 @@ package nl.escay.javaitunesapi.itunes;
  * An item
  */
 public class Item {
+	private int index = -1;
+	
+	public Item() {}
+
+	public Item(int index) {
+		this.index = index;
+	}
 	
     // container (specifier, r/o) : the container of the item
 	// What is a container and a specifier:
@@ -41,8 +48,7 @@ public class Item {
 	 * Returns the index of the item in the internal application order
 	 */
 	public int getIndex() {
-		// TODO
-		return -1;
+		return index;
 	}
 	
 	/**

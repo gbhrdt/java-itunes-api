@@ -21,8 +21,10 @@ package nl.escay.javaitunesapi.itunes;
 
 /**
  * A track representing an audio file (MP3, AIFF, etc.)
+ * 
+	contained by library playlists, user playlists.
+	location (alias, r/o) : the location of the file represented by this track
  */
 public class FileTrack extends Track {
-//	contained by library playlists, user playlists.
-//	location (alias, r/o) : the location of the file represented by this track
+
 }

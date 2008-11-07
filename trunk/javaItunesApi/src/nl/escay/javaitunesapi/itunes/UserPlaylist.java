@@ -21,10 +21,12 @@ package nl.escay.javaitunesapi.itunes;
 
 /**
  * Custom playlists created by the user
+ * 
+    contains file tracks, URL tracks, shared tracks.
+
+    shared (boolean) : is this playlist shared?
+	smart (boolean, r/o) : is this a Smart Playlist?
  */
 public class UserPlaylist extends Playlist {
-//	contains file tracks, URL tracks, shared tracks.
 
-//	shared (boolean) : is this playlist shared?
-//	smart (boolean, r/o) : is this a Smart Playlist?
 }

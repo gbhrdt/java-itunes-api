@@ -23,4 +23,5 @@ package nl.escay.javaitunesapi.itunes;
  * A folder that contains other playlists
  */
 public class FolderPlaylist extends UserPlaylist {
+
 }
