@@ -32,13 +32,13 @@ import java.util.List;
 	album artist (text) : the album artist of the track
 	album rating (integer) : the rating of the album for this track (0 to 100)
 	album rating kind (user/computed, r/o) : the rating kind of the album rating for this track
-	artist (text) : the artist/source of the track
+	#artist (text) : the artist/source of the track
 	bit rate (integer, r/o) : the bit rate of the track (in kbps)
 	bookmark (real) : the bookmark time of the track in seconds
 	bookmarkable (boolean) : is the playback position for this track remembered?
 	bpm (integer) : the tempo of this track in beats per minute
 	category (text) : the category of the track
-	comment (text) : freeform notes about the track
+	#comment (text) : freeform notes about the track
 	compilation (boolean) : is this track from a compilation album?
 	composer (text) : the composer of the track
 	database ID (integer, r/o) : the common, unique ID for this track. If two tracks in different playlists have the same database ID, they are sharing the same data.
@@ -62,8 +62,8 @@ import java.util.List;
 	played count (integer) : number of times this track has been played
 	played date (date) : the date and time this track was last played
 	podcast (boolean, r/o) : is this track a podcast episode?
-	rating (integer) : the rating of this track (0 to 100)
-	rating kind (user/computed, r/o) : the rating kind of this track
+	#rating (integer) : the rating of this track (0 to 100)
+	#rating kind (user/computed, r/o) : the rating kind of this track
 	sample rate (integer, r/o) : the sample rate of the track (in Hz)
 	season number (integer) : the season number of the track
 	shufflable (boolean) : is this track included when shuffling?
@@ -87,9 +87,73 @@ import java.util.List;
 	year (integer) : the year the track was recorded/released
  */
 public class Track extends Item {
+	
 	private List<ArtWork> artworks;
 
 	public List<ArtWork> getArtworks() {
 		return artworks;
+	}
+
+	/**
+	 * Returns the artist/source of the track
+	 * @return the artist/source of the track
+	 */
+	public String getArtist() {
+	    // TODO
+		return null;
+	}
+	
+	/**
+	 * Set the artist/source of the track
+	 */
+	public void setArtist() {
+	    // TODO	
+	}
+	
+	/**
+	 * Set freeform notes about the track
+	 * @param comment the notes to set
+	 */
+	public void setComment(String comment) {
+		// TODO
+	}
+
+	/**
+	 * Get freeform notes about the track
+	 * @return String containing the notes
+	 */
+	public String getComment() {
+		// TODO
+		return null;
+	}
+	
+	/**
+	 * Returns the rating of this track (0 to 100)
+	 * @return the rating of this track (0 to 100)
+	 */
+	public int getRating() {
+		// TODO
+		return -1;
+	}
+
+	/**
+	 * Set the rating of this track (0 to 100)
+	 * @param value (0 to 100)
+	 */
+	public void setRating(int value) {
+		// TODO
+	}
+	
+	/**
+	 * Returns the rating kind of this track
+	 * @return String user/computed
+	 */
+	public String getRatingKind() {
+		// TODO
+		return null;
+	}
+	
+	public String toString() {
+		return "artist: " + getArtist() + ", name: " + getName();
 	}
 }

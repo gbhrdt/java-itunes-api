@@ -19,16 +19,38 @@
 
 package nl.escay.javaitunesapi.itunes;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Logger;
 
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 import nl.escay.javaitunesapi.utils.CommandUtil;
-import nl.escay.javaitunesapi.utils.ConvertUtil;
 
+/**
+ * The main AppleScript entrypoint representation for iTunes
+ *
+	add - add one or more files to a playlist
+	back track - reposition to beginning of current track or go to previous track if already at start of current track
+	convert - convert one or more files or tracks
+	fast forward - skip forward in a playing track
+	next track - advance to the next track in the current playlist
+	pause - pause playback
+	play - play the current track or the specified track or file.
+	playpause - toggle the playing/paused state of the current track
+	previous track - return to the previous track in the current playlist
+	refresh - update file track information from the current information in the track’s file
+	resume - disable fast forward/rewind and resume playback, if playing.
+	reveal - reveal and select a track or playlist
+	rewind - skip backwards in a playing track
+	search - search a playlist for tracks matching the search string. Identical to entering search text in the Search field in iTunes.
+	stop - stop playback
+	update - update the specified iPod
+	eject - eject the specified iPod
+	subscribe - subscribe to a podcast feed
+	updateAllPodcasts - update all subscribed podcast feeds
+	updatePodcast - update podcast feed
+	download - download podcast episode
+ */
 public class ITunesSuite {
 	private static Logger logger = Logger.getLogger(ITunesSuite.class.toString());
 	private Application application = new Application();
@@ -40,6 +62,9 @@ public class ITunesSuite {
 	public static void main(String [] args) {
 	    ITunesSuite iTunes = new ITunesSuite();
 	    iTunes.start();
+	    
+	    Source source = new Source();
+	    System.out.println("Playlists: " + source.getPlaylists());
 	    /*
 	    System.out.println("Nr. of playlists: " + iTunes.getNumberOfPlaylists());
 	    System.out.println("Playlist name of playlist 1: " + iTunes.getPlaylistName(1));
@@ -94,43 +119,6 @@ public class ITunesSuite {
         }
     }
     
-    public Integer getNumberOfPlaylists() {
-    	String command = "tell application \"iTunes\"\nget count of playlists\nend tell";
-    	Object result = null;
-    	try {
-    		result = CommandUtil.getScriptEngine().eval(command);
-    	} catch (ScriptException ex) {
-    		ex.printStackTrace();
-    	}
-    	return ConvertUtil.convertToInteger(result);
-    }
-    
-    public List<String> getPlaylistNames() {
-    	Integer nrOfPlaylists = getNumberOfPlaylists();
-    	List<String> playlistNames = new ArrayList<String>();
-    	if (nrOfPlaylists != null) {
-    		int i = 1; // TODO: document it starts at 1... not 0!
-    		while (i <= nrOfPlaylists) {
-    			playlistNames.add(getPlaylistName(i));
-    			i++;
-    		}
-    	}
-    	return playlistNames;
-    }
-    
-    public String getPlaylistName(int index) {
-    	// TODO: validate index value
-    	String command = "tell application \"iTunes\"\nget name of playlist " + index + "\nend tell";
-    	Object result = null;
-    	try {
-    		result = CommandUtil.getScriptEngine().eval(command);
-    	} catch (ScriptException ex) {
-    		ex.printStackTrace();
-    		return null;
-    	}
-    	return ConvertUtil.convertToString(result);
-    }
-
     public void test() {
     	String command = "tell application \"iTunes\"\nname of track 1 of library playlist 1\nend tell";
     	try {

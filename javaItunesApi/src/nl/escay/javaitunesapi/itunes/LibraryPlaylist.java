@@ -27,6 +27,7 @@ import java.util.List;
  * contains file tracks, URL tracks, shared tracks
  */
 public class LibraryPlaylist extends Playlist {
+
 	private List<FileTrack> fileTracks;
 	private List<URLTrack> urlTracks;
 	private List<SharedTrack> sharedTracks;

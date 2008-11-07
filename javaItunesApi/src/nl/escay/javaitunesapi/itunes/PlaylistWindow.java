@@ -21,8 +21,10 @@ package nl.escay.javaitunesapi.itunes;
 
 /**
  * A sub-window showing a single playlist
+ * 
+	selection (specifier, r/o) : the selected songs
+	view (playlist, r/o) : the playlist displayed in the window
  */
 public class PlaylistWindow extends Window {
-//	selection (specifier, r/o) : the selected songs
-//	view (playlist, r/o) : the playlist displayed in the window
+
 }

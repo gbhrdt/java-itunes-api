@@ -21,8 +21,10 @@ package nl.escay.javaitunesapi.itunes;
 
 /**
  * A track representing a network stream
+ * 
+	contained by library playlists, radio tuner playlists, user playlists.
+	address (text) : the URL for this track
  */
 public class URLTrack extends Track {
-//	contained by library playlists, radio tuner playlists, user playlists.
-//	address (text) : the URL for this track
+
 }
