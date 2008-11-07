@@ -19,19 +19,27 @@
 
 package nl.escay.javaitunesapi.itunes;
 
+import java.util.List;
+
 /**
  * A list of songs/streams
+ * 
+	 # contains tracks; contained by sources.
+
+	 duration (integer, r/o) : the total length of all songs (in seconds)
+	 name (text) : the name of the playlist
+	 parent (playlist, r/o) : folder which contains this playlist (if any)
+	 shuffle (boolean) : play the songs in this playlist in random order?
+	 size (double integer, r/o) : the total size of all songs (in bytes)
+	 song repeat (off/one/all) : playback repeat mode
+	 special kind (none/Audiobooks/folder/Movies/Music/Party Shuffle/Podcasts/Purchased Music/TV Shows/Videos, r/o) : special playlist kind
+	 time (text, r/o) : the length of all songs in MM:SS format
+	 visible (boolean, r/o) : is this playlist visible in the Source list?
  */
 public class Playlist extends Item {
-//	 contains tracks; contained by sources.
+	private List<Track> tracks;
 
-//	 duration (integer, r/o) : the total length of all songs (in seconds)
-//	 name (text) : the name of the playlist
-//	 parent (playlist, r/o) : folder which contains this playlist (if any)
-//	 shuffle (boolean) : play the songs in this playlist in random order?
-//	 size (double integer, r/o) : the total size of all songs (in bytes)
-//	 song repeat (off/one/all) : playback repeat mode
-//	 special kind (none/Audiobooks/folder/Movies/Music/Party Shuffle/Podcasts/Purchased Music/TV Shows/Videos, r/o) : special playlist kind
-//	 time (text, r/o) : the length of all songs in MM:SS format
-//	 visible (boolean, r/o) : is this playlist visible in the Source list?
+	public List<Track> getTracks() {
+		return tracks;
+	}
 }

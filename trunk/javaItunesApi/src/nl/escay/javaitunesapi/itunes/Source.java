@@ -19,13 +19,82 @@
 
 package nl.escay.javaitunesapi.itunes;
 
+import java.util.List;
+
 /**
  * A music source (music library, CD, device, etc.)
+ * 
+ * From the iTunes script library 8.0.1:
+ * 
+    # contains audio CD playlists, device playlists, library playlists, 
+    #   playlists, radio tuner playlists, user playlists; contained by application.
+   
+	capacity (double integer, r/o) : the total size of the source if it has a fixed size
+	free space (double integer, r/o) : the free space on the source if it has a fixed size
+	kind (library/iPod/audio CD/MP3 CD/device/radio tuner/shared library/unknown, r/o)
  */
 public class Source extends Item {
-	/* From the iTunes script library 8.0.1:
-		capacity (double integer, r/o) : the total size of the source if it has a fixed size
-		free space (double integer, r/o) : the free space on the source if it has a fixed size
-		kind (library/iPod/audio CD/MP3 CD/device/radio tuner/shared library/unknown, r/o)
-     */
+	private List<AudioCDPlaylist> audioCDPlaylists;
+	private List<DevicePlaylist> devicePlayLists;
+	private List<LibraryPlaylist> libraryPlaylists;
+	private List<Playlist> playlists;
+	private List<RadioTunerPlaylist> radioTunerPlaylists;
+	private List<UserPlaylist> userPlaylists;
+
+	public List<AudioCDPlaylist> getAudioCDPlaylists() {
+		return audioCDPlaylists;
+	}
+	
+	public List<DevicePlaylist> getDevicePlayLists() {
+		return devicePlayLists;
+	}
+	
+	public List<LibraryPlaylist> getLibraryPlaylists() {
+		return libraryPlaylists;
+	}
+	
+	public List<Playlist> getPlaylists() {
+		return playlists;
+	}
+	
+	public List<RadioTunerPlaylist> getRadioTunerPlaylists() {
+		return radioTunerPlaylists;
+	}
+	
+	public List<UserPlaylist> getUserPlaylists() {
+		return userPlaylists;
+	}
+	
+	/**
+	 * Returns the total size of the source if it has a fixed size
+	 * 
+	 * TODO: why defined as double and int ? what is returned? number of bytes?
+	 */
+	public Double getCapacity() {
+		// TODO
+		return null;
+	}
+
+	/**
+	 * Returns the free space on the source if it has a fixed size
+	 * 
+	 * TODO: why defined as double and int ? what is returned? number of bytes?
+	 */
+	public Double getFreeSpace() {
+		// TODO
+		return null;
+	}
+
+	/**
+	 * Returns the source kind.
+	 * 
+	 * @return String with one of the following values:
+	 *     library/iPod/audio CD/MP3 CD/device/radio tuner/shared library/unknown
+	 *     
+     * TODO: return Enumeration ?!!
+	 */
+	public String getKind() {
+		// TODO
+		return null;
+	}
 }

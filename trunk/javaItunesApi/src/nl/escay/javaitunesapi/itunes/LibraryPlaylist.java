@@ -19,9 +19,27 @@
 
 package nl.escay.javaitunesapi.itunes;
 
+import java.util.List;
+
 /**
  * The master music library playlist
+ * 
+ * contains file tracks, URL tracks, shared tracks
  */
 public class LibraryPlaylist extends Playlist {
-// contains file tracks, URL tracks, shared tracks
+	private List<FileTrack> fileTracks;
+	private List<URLTrack> urlTracks;
+	private List<SharedTrack> sharedTracks;
+
+	public List<FileTrack> getFileTracks() {
+		return fileTracks;
+	}
+	
+	public List<URLTrack> getUrlTracks() {
+		return urlTracks;
+	}
+	
+	public List<SharedTrack> getSharedTracks() {
+		return sharedTracks;
+	}
 }
