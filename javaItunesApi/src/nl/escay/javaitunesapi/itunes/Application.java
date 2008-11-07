@@ -19,14 +19,17 @@
 
 package nl.escay.javaitunesapi.itunes;
 
+import java.util.List;
+
 import nl.escay.javaitunesapi.utils.CommandUtil;
 import nl.escay.javaitunesapi.utils.ConvertUtil;
 
 /**
- *  The application program (iTunes GUI)
- */
-public class Application {
-	/* From the iTunes script library 8.0.1:
+ * The application program (iTunes GUI)
+ * 
+ * From the iTunes script library 8.0.1:
+ * 
+        # contains browser windows, encoders, EQ presets, EQ windows, playlist windows, sources, visuals, windows.
 
 		current encoder (encoder) : the currently selected encoder (MP3, AIFF, WAV, etc.)
 		current EQ preset (EQ preset) : the currently selected equalizer preset
@@ -37,18 +40,60 @@ public class Application {
 		current visual (visual) : the currently selected visual plug-in
 		EQ enabled (boolean) : is the equalizer enabled?
 		fixed indexing (boolean) : true if all AppleScript track indices should be independent of the play order of the owning playlist.
-		frontmost (boolean) : is iTunes the frontmost application?
-		full screen (boolean) : are visuals displayed using the entire screen?
-		name (text, r/o) : the name of the application
-		mute (boolean) : has the sound output been muted?
+		# frontmost (boolean) : is iTunes the frontmost application?
+		# full screen (boolean) : are visuals displayed using the entire screen?
+		# name (text, r/o) : the name of the application
+		# mute (boolean) : has the sound output been muted?
 		player position (integer) : the player’s position within the currently playing track in seconds.
-		player state (stopped/playing/paused/fast forwarding/rewinding, r/o) : is iTunes stopped, paused, or playing?
+		# player state (stopped/playing/paused/fast forwarding/rewinding, r/o) : is iTunes stopped, paused, or playing?
 		selection (specifier, r/o) : the selection visible to the user
-		sound volume (integer) : the sound output volume (0 = minimum, 100 = maximum)
-		version (version, r/o) : the version of iTunes
+		# sound volume (integer) : the sound output volume (0 = minimum, 100 = maximum)
+		# version (version, r/o) : the version of iTunes
 		visuals enabled (boolean) : are visuals currently being displayed?
 		visual size (small/medium/large) : the size of the displayed visual
-	*/
+ */
+public class Application {
+	private List<BrowserWindow> browserWindows;
+	private List<Encoder> encoders;
+	private List<EQPreset> eqPresets;
+	private List<EQWindow> eqWindows;
+	private List<PlaylistWindow> playListWindows;
+	private List<Source> sources;
+	private List<Visual> visuals;
+	private List<Window> windows;
+	
+	public List<BrowserWindow> getBrowserWindows() {
+		return browserWindows;
+	}
+
+	public List<Encoder> getEncoders() {
+		return encoders;
+	}
+
+	public List<EQPreset> getEqPresets() {
+		return eqPresets;
+	}
+
+	public List<EQWindow> getEqWindows() {
+		return eqWindows;
+	}
+
+	public List<PlaylistWindow> getPlayListWindows() {
+		return playListWindows;
+	}
+
+	public List<Source> getSources() {
+		return sources;
+	}
+
+	public List<Visual> getVisuals() {
+		return visuals;
+	}
+
+	public List<Window> getWindows() {
+		return windows;
+	}
+	
 
 	/**
 	 * Returns the playlist containing the currently targeted track
@@ -93,7 +138,7 @@ public class Application {
 
 	/**
 	 * Set visuals to display using the entire screen
-	 * TODO: DOESNT SEEM TO DO ANYTHING
+	 * TODO: DOESN'T SEEM TO DO ANYTHING
 	 */
 	public void setFullScreen(boolean value) {
         CommandUtil.executeCommand("set full screen to " + value);
@@ -101,7 +146,7 @@ public class Application {
 	
 	/**
 	 * Are visuals displayed using the entire screen?
-	 * TODO: DOESNT SEEM TO DO ANYTHING, always returns true...
+	 * TODO: DOESN'T SEEM TO DO ANYTHING, always returns true...
 	 */
 	public boolean isFullScreen() {
 		Boolean result = ConvertUtil.convertToBoolean(CommandUtil.executeCommand("get full screen"));

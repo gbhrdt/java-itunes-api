@@ -21,7 +21,8 @@ package nl.escay.javaitunesapi.itunes;
 
 /**
  * A track residing in a shared library
+ * 
+ * contained by library playlists, user playlists.
  */
 public class SharedTrack {
-//	contained by library playlists, user playlists.
 }

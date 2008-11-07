@@ -23,9 +23,44 @@ package nl.escay.javaitunesapi.itunes;
  * An item
  */
 public class Item {
-//	container (specifier, r/o) : the container of the item
-//	id (integer, r/o) : the id of the item
-//	index (integer, r/o) : The index of the item in internal application order.
-//	name (text) : the name of the item
-//	persistent ID (text, r/o) : the id of the item as a hexidecimal string. This id does not change over time.
+	
+    // container (specifier, r/o) : the container of the item
+	// What is a container and a specifier:
+	// http://developer.apple.com/documentation/AppleScript/Conceptual/AppleScriptLangGuide/conceptual/ASLR_fundamentals.html#//apple_ref/doc/uid/TP40000983-CH218-SW7
+	// TODO: how to represent this in java? A reference to another item?
+    
+	/**
+	 * Returns the id of the item
+	 */
+	public int getId() {
+		// TODO
+		return -1;
+	}
+
+	/**
+	 * Returns the index of the item in the internal application order
+	 */
+	public int getIndex() {
+		// TODO
+		return -1;
+	}
+	
+	/**
+	 * Returns the name of the item
+	 * @return the name of the item
+	 */
+	public String getName() {
+		// TODO
+		return null;
+	}
+	
+	/**
+	 * Returns the id of the item as a hexadecimal string. 
+	 * This id does not change over time.
+	 * @return the id of the item as a hexadecimal string.
+	 */
+	public String getPersistendID() {
+		// TODO
+		return null;
+	}
 }

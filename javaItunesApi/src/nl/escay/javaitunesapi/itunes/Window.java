@@ -23,6 +23,9 @@ package nl.escay.javaitunesapi.itunes;
  * Any window
  */
 public class Window extends Item {
+	
+//	contained by application.
+//	
 //	bounds (rectangle) : the boundary rectangle for the window
 //	closeable (boolean, r/o) : does the window have a close box?
 //	collapseable (boolean, r/o) : does the window have a collapse (windowshade) box?
