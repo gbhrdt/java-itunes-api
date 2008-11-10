@@ -19,6 +19,7 @@
 
 package nl.escay.javaitunesapi.itunes;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.script.ScriptException;
@@ -54,9 +55,24 @@ public class Playlist extends Item {
 	private List<Track> tracks;
 
 	public List<Track> getTracks() {
+		tracks = new ArrayList<Track>();
+		int numberOfTracks = getCount();
+		if (numberOfTracks > 0) {
+			for(int i = 1; i <= numberOfTracks;i++) {
+				tracks.add(new Track(i, this));
+			}
+		}
 		return tracks;
 	}
 
+	/**
+	 * Returns the number of items in the playlist
+	 * @return int the size
+	 */
+	public int getCount() {
+		return ConvertUtil.convertToInt(CommandUtil.executeCommand("count of tracks of playlist " + getIndex()));
+	}
+	
 	/**
 	 * Returns the total length of all songs (in seconds)
 	 * @return int the total length of all songs (in seconds)
