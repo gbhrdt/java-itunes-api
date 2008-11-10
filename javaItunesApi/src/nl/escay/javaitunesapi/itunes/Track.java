@@ -21,6 +21,9 @@ package nl.escay.javaitunesapi.itunes;
 
 import java.util.List;
 
+import nl.escay.javaitunesapi.utils.CommandUtil;
+import nl.escay.javaitunesapi.utils.ConvertUtil;
+
 /**
  * A playable audio source
  * 
@@ -89,6 +92,17 @@ import java.util.List;
 public class Track extends Item {
 	
 	private List<ArtWork> artworks;
+	private Playlist playlist;
+
+	public Track() {
+		// TODO: Cannot be used for now, testing with the 
+		// other constructor.
+	}
+
+	public Track(int index, Playlist playlist) {
+		super(index);
+		this.playlist = playlist;
+	}
 
 	public List<ArtWork> getArtworks() {
 		return artworks;
@@ -134,6 +148,14 @@ public class Track extends Item {
 	public int getRating() {
 		// TODO
 		return -1;
+	}
+	
+	@Override
+	public String getName() {
+		//tell application "iTunes"
+		//
+		//end tell
+		return ConvertUtil.convertToString(CommandUtil.executeCommand("get name of track " + getIndex() + " of playlist " + playlist.getIndex()));
 	}
 
 	/**

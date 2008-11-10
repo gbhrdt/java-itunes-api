@@ -19,6 +19,7 @@
 
 package nl.escay.javaitunesapi.itunes;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.script.ScriptEngineManager;
@@ -64,7 +65,20 @@ public class ITunesSuite {
 	    iTunes.start();
 	    
 	    Source source = new Source();
-	    System.out.println("Playlists: " + source.getPlaylists());
+	    
+	    List<Playlist> playLists = source.getPlaylists();
+	    System.out.println("Playlists: " + playLists);
+	    for (Playlist playlist : playLists) {
+	    	System.out.println("Playlist: " + playlist.getIndex() + ", name: "   + playlist.getName() + ", count = " + playlist.getCount());
+	    	
+	    	if (playlist.getCount() < 100) {
+	    		List<Track> tracks = playlist.getTracks();
+	    		for (Track track : tracks) {
+	    			System.out.println("Track: " + track.getIndex() + ", name: " + track.getName());
+	    		}
+	    	}
+	    }
+	    
 	    /*
 	    System.out.println("Nr. of playlists: " + iTunes.getNumberOfPlaylists());
 	    System.out.println("Playlist name of playlist 1: " + iTunes.getPlaylistName(1));

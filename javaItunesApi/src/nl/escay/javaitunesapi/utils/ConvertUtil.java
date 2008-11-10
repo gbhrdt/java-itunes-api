@@ -62,4 +62,12 @@ public class ConvertUtil {
     	}
     	return result;
     }
+
+	public static int convertToInt(Object executeCommand) {
+		Integer value = convertToInteger(executeCommand);
+		if (value == null) {
+			return -1;
+		}
+		return value.intValue();
+	}
 }
