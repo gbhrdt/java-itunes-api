@@ -113,8 +113,7 @@ public class Track extends Item {
 	 * @return the artist/source of the track
 	 */
 	public String getArtist() {
-	    // TODO
-		return null;
+		return ConvertUtil.convertToString(CommandUtil.executeCommand("get artist of track " + getIndex() + " of playlist " + playlist.getIndex()));
 	}
 	
 	/**
@@ -137,24 +136,19 @@ public class Track extends Item {
 	 * @return String containing the notes
 	 */
 	public String getComment() {
-		// TODO
-		return null;
+		return ConvertUtil.convertToString(CommandUtil.executeCommand("get comment of track " + getIndex() + " of playlist " + playlist.getIndex()));
 	}
 	
 	/**
 	 * Returns the rating of this track (0 to 100)
-	 * @return the rating of this track (0 to 100)
+	 * @return the rating of this track (0 to 100), -1 if failed
 	 */
 	public int getRating() {
-		// TODO
-		return -1;
+		return ConvertUtil.convertToInt(CommandUtil.executeCommand("get rating of track " + getIndex() + " of playlist " + playlist.getIndex()));
 	}
 	
 	@Override
 	public String getName() {
-		//tell application "iTunes"
-		//
-		//end tell
 		return ConvertUtil.convertToString(CommandUtil.executeCommand("get name of track " + getIndex() + " of playlist " + playlist.getIndex()));
 	}
 
@@ -171,8 +165,7 @@ public class Track extends Item {
 	 * @return String user/computed
 	 */
 	public String getRatingKind() {
-		// TODO
-		return null;
+		return ConvertUtil.convertToString(CommandUtil.executeCommand("get rating kind of track " + getIndex() + " of playlist " + playlist.getIndex()));
 	}
 	
 	public String toString() {
