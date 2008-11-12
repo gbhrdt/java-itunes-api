@@ -185,6 +185,6 @@ public class Playlist extends Item {
 	}
 	
 	public String toString() {
-		return getName();
+		return getName() + ", count: " + getCount();
 	}
 }
