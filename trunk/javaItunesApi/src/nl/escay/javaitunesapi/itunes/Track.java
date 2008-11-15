@@ -62,8 +62,8 @@ import nl.escay.javaitunesapi.utils.ConvertUtil;
 	long description (text)
 	lyrics (text) : the lyrics of the track
 	modification date (date, r/o) : the modification date of the content of this track
-	played count (integer) : number of times this track has been played
-	played date (date) : the date and time this track was last played
+	#played count (integer) : number of times this track has been played
+	#played date (date) : the date and time this track was last played
 	podcast (boolean, r/o) : is this track a podcast episode?
 	#rating (integer) : the rating of this track (0 to 100)
 	#rating kind (user/computed, r/o) : the rating kind of this track
@@ -124,14 +124,6 @@ public class Track extends Item {
 	}
 	
 	/**
-	 * Set freeform notes about the track
-	 * @param comment the notes to set
-	 */
-	public void setComment(String comment) {
-		// TODO
-	}
-
-	/**
 	 * Get freeform notes about the track
 	 * @return String containing the notes
 	 */
@@ -140,6 +132,55 @@ public class Track extends Item {
 	}
 	
 	/**
+	 * Set freeform notes about the track
+	 * @param comment the notes to set
+	 */
+	public void setComment(String comment) {
+		System.out.println("### new comment value:\n" + comment);
+		CommandUtil.executeCommand("set comment of track " + getIndex() + " of playlist " + playlist.getIndex() + " to \"" + comment + "\"");
+	}
+
+	@Override
+	public String getName() {
+		return ConvertUtil.convertToString(CommandUtil.executeCommand("get name of track " + getIndex() + " of playlist " + playlist.getIndex()));
+	}
+
+	/**
+	 * Returns the number of times this track has been played
+	 * @return the number of times this track has been played, -1 if failed
+	 */
+	public int getPlayedCount() {
+		return ConvertUtil.convertToInt(CommandUtil.executeCommand("get played count of track " + getIndex() + " of playlist " + playlist.getIndex()));
+	}
+
+	/**
+	 * Set the number of times this track has been played
+	 * @param value the number of times this track has been played
+	 */
+	public void setPlayedCount(int value) {
+		// TODO
+	}
+
+	/**
+	 * Returns the date and time this track was last played
+	 * TODO: analyse the format, have to dive into AppleScript date
+	 * Example string returned on my system: "dinsdag, 1 april 2008 15:12:23"
+	 * 
+	 * @return the date and time this track was last played
+	 */
+	public String getPlayedDate() {
+		return ConvertUtil.convertToString(CommandUtil.executeCommand("get played date of track " + getIndex() + " of playlist " + playlist.getIndex()));
+	}
+	
+	/**
+	 * Set the date and time this track was last played
+	 * @param value the date and time this track was last played
+	 */
+	public void setPlayedDate(String value) {
+		// TODO
+	}
+
+	/**
 	 * Returns the rating of this track (0 to 100)
 	 * @return the rating of this track (0 to 100), -1 if failed
 	 */
@@ -147,11 +188,6 @@ public class Track extends Item {
 		return ConvertUtil.convertToInt(CommandUtil.executeCommand("get rating of track " + getIndex() + " of playlist " + playlist.getIndex()));
 	}
 	
-	@Override
-	public String getName() {
-		return ConvertUtil.convertToString(CommandUtil.executeCommand("get name of track " + getIndex() + " of playlist " + playlist.getIndex()));
-	}
-
 	/**
 	 * Set the rating of this track (0 to 100)
 	 * @param value (0 to 100)
