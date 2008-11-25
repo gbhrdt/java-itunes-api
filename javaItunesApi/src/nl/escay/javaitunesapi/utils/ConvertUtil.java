@@ -59,6 +59,10 @@ public class ConvertUtil {
 			String value = sb.toString();
 			// TODO: only expecting 1 value... should another approach be used?
 			result = value.replace("\n", "");
+			if (result.length() > 2) {
+				// Remove surrounding quotes
+				result = result.substring(1, result.length() -1);
+			}
     	}
     	return result;
     }

@@ -1,3 +1,22 @@
+/*
+ * Copyright 2008 Ronald Martijn Morrien
+ * 
+ * This file is part of java-itunes-api.
+ *
+ * java-itunes-api is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * java-itunes-api is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with java-itunes-api. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package nl.escay.javaitunesapi.test;
 
 import java.io.ByteArrayInputStream;
@@ -62,31 +81,6 @@ public class BackupRatingsIntoMp3 {
 	    		}
 	    	}
 	    }
-	    
-//	    System.out.println("Nr. of playlists: " + iTunes.getNumberOfPlaylists());
-//	    System.out.println("Playlist name of playlist 1: " + iTunes.getPlaylistName(1));
-//	    System.out.println("Playlist names: " + iTunes.getPlaylistNames());
-//
-//	    System.out.println("Sound volume: " + iTunes.getApplication().getSoundVolume());
-//	    iTunes.getApplication().setSoundVolume(80);
-//	    System.out.println("Sound volume: " + iTunes.getApplication().getSoundVolume());
-//	    
-//	    System.out.println("Is frontmost: " + iTunes.getApplication().isFrontMost());
-//	    //iTunes.getApplication().setFrontMost(true);
-//	    //System.out.println("Is frontmost: " + iTunes.getApplication().isFrontMost());
-//	    
-//	    System.out.println("Is fullscreen: " + iTunes.getApplication().isFullScreen());
-//	    iTunes.getApplication().setFullScreen(true);
-//	    System.out.println("Is fullscreen: " + iTunes.getApplication().isFullScreen());
-//
-//	    iTunes.getApplication().mute(false);
-//	    System.out.println("Is muted: " + iTunes.getApplication().isMuted());
-//	    iTunes.getApplication().mute(true);
-//	    System.out.println("Is muted: " + iTunes.getApplication().isMuted());
-//	    
-//	    System.out.println("Name: " + iTunes.getApplication().getName());
-//	    System.out.println("Version: " + iTunes.getApplication().getVersion());
-//	    System.out.println("Player state: " + iTunes.getApplication().getPlayerState());
 	}
 	
 	
