@@ -102,6 +102,14 @@ public class Track extends Item {
 	public Track(int index, Playlist playlist) {
 		super(index);
 		this.playlist = playlist;
+		
+		String properties = ConvertUtil.convertToString(CommandUtil.executeCommand("get {artist, name, comment, rating} of track " + getIndex() + " of playlist " + playlist.getIndex()));
+		String[] properties2 = properties.split(",");
+		if (properties2.length == 4) {
+		    System.out.println("properties: " + properties2[0] + ", " + properties2[1] + ", " + properties2[2] + ", " + properties2[3]);
+		} else {
+			throw new RuntimeException("Could not determine the correct number of properties. Properties retrieved: " + properties);
+		}
 	}
 
 	public List<ArtWork> getArtworks() {
