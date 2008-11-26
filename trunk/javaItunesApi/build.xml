@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<project name="build.xml" default="build">
+	<property name="build.classes.dir" value="build" />
+	<property name="deploy.dir" value="deploy" />
+	<property name="external.lib.dir" value="lib" />
+	<property name="reports.tests" value="reports" />
+	<property name="src.java.dir" value="src" />
+	<property name="test.java.dir" value="src" />
+
+	<path id="project.classpath">
+		<pathelement location="${build.classes.dir}" />
+	</path>
+
+	<path id="junit.lib.path">
+		<fileset dir="${external.lib.dir}">
+			<include name="junit-4.5.jar" />
+		</fileset>
+	</path>
+
+	<path id="jasconn.lib.path">
+		<fileset dir="${external.lib.dir}">
+			<include name="jasconn.jar" />
+		</fileset>
+	</path>
+
+	<path id="project.class.path">
+		<pathelement location="${deploy.dir}/gatewayServer.jar" />
+		<fileset dir="${external.lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<target name="clean">
+		<delete dir="${build.classes.dir}" />
+		<delete dir="${deploy.dir}" />
+		<delete dir="${reports.tests}" />
+	</target>
+	
+	<target name="init" depends="clean">
+		<mkdir dir="${build.classes.dir}" />
+		<mkdir dir="${deploy.dir}" />
+		<mkdir dir="${reports.tests}" />
+	</target>
+
+	<target name="compile" depends="init">
+		<javac srcdir="${src.java.dir}" destdir="${build.classes.dir}">
+			<classpath refid="jasconn.lib.path" />
+			<classpath refid="junit.lib.path" />
+		</javac>
+	</target>
+
+	<target name="compile-test" depends="compile">
+		<javac srcdir="${test.java.dir}" destdir="${build.classes.dir}">
+			<classpath refid="jasconn.lib.path" />
+			<classpath refid="junit.lib.path" />
+		</javac>
+	</target>
+
+	<target name="test" depends="compile-test">
+		<junit printsummary="yes" haltonfailure="yes">
+			<classpath location="${build.classes.dir}" />
+			<classpath refid="junit.lib.path" />
+			<classpath>
+				<pathelement location="${build.classes.dir}" />
+			</classpath>
+			<formatter type="plain" />
+			<batchtest fork="yes" todir="${reports.tests}">
+				<fileset dir="${test.java.dir}">
+					<include name="**/*Test*.java" />
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+
+	<target name="build" depends="package">
+	</target>
+
+	<target name="package" depends="test">
+		<mkdir dir="${deploy.dir}" />
+		<jar destfile="${deploy.dir}/javaitunesapi.jar" basedir="${build.classes.dir}" excludes="**/Test.class">
+			<manifest>
+				<attribute name="Main-Class" value="nl.escay.javaitunesapi.demo.Demo" />
+			</manifest>
+		</jar>
+	</target>
+</project>
