@@ -103,13 +103,9 @@ public class Track extends Item {
 		super(index);
 		this.playlist = playlist;
 		
-		String properties = ConvertUtil.convertToString(CommandUtil.executeCommand("get {artist, name, comment, rating} of track " + getIndex() + " of playlist " + playlist.getIndex()));
-		String[] properties2 = properties.split(",");
-		if (properties2.length == 4) {
-		    System.out.println("properties: " + properties2[0] + ", " + properties2[1] + ", " + properties2[2] + ", " + properties2[3]);
-		} else {
-			throw new RuntimeException("Could not determine the correct number of properties. Properties retrieved: " + properties);
-		}
+		Object commandResult = CommandUtil.executeCommand("get {artist, name, comment, rating} of track " + getIndex() + " of playlist " + playlist.getIndex());
+		List<?> parseResult = (List<?>) commandResult;
+		assert(parseResult.size() == 4);
 	}
 
 	public List<ArtWork> getArtworks() {
@@ -121,7 +117,7 @@ public class Track extends Item {
 	 * @return the artist/source of the track
 	 */
 	public String getArtist() {
-		return ConvertUtil.convertToString(CommandUtil.executeCommand("get artist of track " + getIndex() + " of playlist " + playlist.getIndex()));
+		return ConvertUtil.asString(CommandUtil.executeCommand("get artist of track " + getIndex() + " of playlist " + playlist.getIndex()));
 	}
 	
 	/**
@@ -136,7 +132,7 @@ public class Track extends Item {
 	 * @return String containing the notes
 	 */
 	public String getComment() {
-		return ConvertUtil.convertToString(CommandUtil.executeCommand("get comment of track " + getIndex() + " of playlist " + playlist.getIndex()));
+		return ConvertUtil.asString(CommandUtil.executeCommand("get comment of track " + getIndex() + " of playlist " + playlist.getIndex()));
 	}
 	
 	/**
@@ -150,7 +146,7 @@ public class Track extends Item {
 
 	@Override
 	public String getName() {
-		return ConvertUtil.convertToString(CommandUtil.executeCommand("get name of track " + getIndex() + " of playlist " + playlist.getIndex()));
+		return ConvertUtil.asString(CommandUtil.executeCommand("get name of track " + getIndex() + " of playlist " + playlist.getIndex()));
 	}
 
 	/**
@@ -177,7 +173,7 @@ public class Track extends Item {
 	 * @return the date and time this track was last played
 	 */
 	public String getPlayedDate() {
-		return ConvertUtil.convertToString(CommandUtil.executeCommand("get played date of track " + getIndex() + " of playlist " + playlist.getIndex()));
+		return ConvertUtil.asString(CommandUtil.executeCommand("get played date of track " + getIndex() + " of playlist " + playlist.getIndex()));
 	}
 	
 	/**
@@ -209,10 +205,10 @@ public class Track extends Item {
 	 * @return String user/computed
 	 */
 	public String getRatingKind() {
-		return ConvertUtil.convertToString(CommandUtil.executeCommand("get rating kind of track " + getIndex() + " of playlist " + playlist.getIndex()));
+		return ConvertUtil.asString(CommandUtil.executeCommand("get rating kind of track " + getIndex() + " of playlist " + playlist.getIndex()));
 	}
 	
 	public String toString() {
-		return "artist: " + getArtist() + ", name: " + getName();
+		return getArtist() + " - " + getName();
 	}
 }

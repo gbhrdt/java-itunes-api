@@ -24,6 +24,7 @@ import java.util.List;
 import nl.escay.javaitunesapi.itunes.ITunesSuite;
 import nl.escay.javaitunesapi.itunes.Playlist;
 import nl.escay.javaitunesapi.itunes.Source;
+import nl.escay.javaitunesapi.itunes.Track;
 import nl.escay.javaitunesapi.parser.AppleScriptValueParser;
 import nl.escay.javaitunesapi.utils.CommandUtil;
 
@@ -35,13 +36,35 @@ public class Demo {
 	public static void main(String[] args) {
         System.out.println("Demo javaitunesapi");
 		ITunesSuite iTunes = new ITunesSuite();
+		
+		System.out.println("Starting iTunes");
 	    iTunes.start();
+	    System.out.println("iTunes started");
 
 	    Source source = new Source();
 
 	    List<Playlist> playLists = source.getPlaylists();
 	    System.out.println("Nr. of playlists: " + playLists.size());
 	    System.out.println("Playlists: " + playLists);
+	    
+	    for (Playlist playlist : playLists) {
+	    	System.out.println("Playlist: " + playlist + ", contains " + playlist.getCount() + " song(s).");
+	    	System.out.println("  duration: " + playlist.getDuration());
+	    	System.out.println("  time: " + playlist.getTime());
+	    	System.out.println("  size: " + playlist.getSize());
+	    	System.out.println("  song repeat: " + playlist.getSongRepeat());
+	    	System.out.println("  special kind: " + playlist.getSpecialKind());
+	    	System.out.println("  parent: " + playlist.getParent());
+	    	System.out.println("  shuffle: " + playlist.getShuffle());
+	    	
+	    	if (playlist.getCount() < 50) {
+	    		List<Track> tracks = playlist.getTracks();
+	    		for (Track track : tracks) {
+	    			System.out.println("Track: " + track);
+	    		}
+	    		//return;
+	    	}
+	    }
 
 	    System.out.println("Sound volume: " + iTunes.getApplication().getSoundVolume());
 	    iTunes.getApplication().setSoundVolume(80);

@@ -100,7 +100,7 @@ public class Application {
 	 * @return The name of the playlist containing the currently targeted track
 	 */
 	public String getCurrentPlaylist() {
-		return ConvertUtil.convertToString(CommandUtil.executeCommand("get current playlist"));
+		return ConvertUtil.asString(CommandUtil.executeCommand("get current playlist"));
 	}
 
 	/**
@@ -108,7 +108,7 @@ public class Application {
 	 * @return The name of the current targeted track
 	 */
 	public String getCurrentTrack() {
-		return ConvertUtil.convertToString(CommandUtil.executeCommand("get current track"));
+		return ConvertUtil.asString(CommandUtil.executeCommand("get current track"));
 	}
 
 	/**
@@ -128,7 +128,7 @@ public class Application {
 	 * @return true, if it is the frontmost application, otherwise false
 	 */
 	public boolean isFrontMost() {
-		Boolean result = ConvertUtil.convertToBoolean(CommandUtil.executeCommand("get frontmost"));
+		Boolean result = ConvertUtil.asBoolean(CommandUtil.executeCommand("get frontmost"));
 		if (result != null) {
 			return result.booleanValue();
 		}
@@ -149,7 +149,7 @@ public class Application {
 	 * TODO: DOESN'T SEEM TO DO ANYTHING, always returns true...
 	 */
 	public boolean isFullScreen() {
-		Boolean result = ConvertUtil.convertToBoolean(CommandUtil.executeCommand("get full screen"));
+		Boolean result = ConvertUtil.asBoolean(CommandUtil.executeCommand("get full screen"));
 		if (result != null) {
 			return result.booleanValue();
 		}
@@ -162,7 +162,7 @@ public class Application {
 	 * @return The name of the application: "iTunes"
 	 */
 	public String getName() {
-		return ConvertUtil.convertToString(CommandUtil.executeCommand("get name"));
+		return ConvertUtil.asString(CommandUtil.executeCommand("get name"));
 	}
 	
 	/**
@@ -176,7 +176,7 @@ public class Application {
 	 * Has the sound output been muted?
 	 */
 	public boolean isMuted() {
-		Boolean result = ConvertUtil.convertToBoolean(CommandUtil.executeCommand("get mute"));
+		Boolean result = ConvertUtil.asBoolean(CommandUtil.executeCommand("get mute"));
 		if (result != null) {
 			return result.booleanValue();
 		}
@@ -192,7 +192,7 @@ public class Application {
 	 * TODO: use enums?
 	 */
 	public String getPlayerState() {
-		return ConvertUtil.convertToString(CommandUtil.executeCommand("get player state"));
+		return ConvertUtil.asString(CommandUtil.executeCommand("get player state"));
 	}
 
 	/**
@@ -200,7 +200,7 @@ public class Application {
 	 * @return a value [0..100], 0 = minimum, 100 = maximum, -1 if command failed
 	 */
 	public int getSoundVolume() {
-		Integer value = ConvertUtil.convertToInteger(CommandUtil.executeCommand("get sound volume"));
+		Integer value = ConvertUtil.asInteger(CommandUtil.executeCommand("get sound volume"));
 		if (value != null) {
 			return value.intValue();
 		}
@@ -224,6 +224,6 @@ public class Application {
 	 * @return The version of the application
 	 */
 	public String getVersion() {
-		return ConvertUtil.convertToString(CommandUtil.executeCommand("get version"));
+		return ConvertUtil.asString(CommandUtil.executeCommand("get version"));
 	}
 }

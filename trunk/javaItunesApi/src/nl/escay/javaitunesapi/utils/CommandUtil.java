@@ -24,6 +24,8 @@ import java.util.logging.Logger;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
+import nl.escay.javaitunesapi.parser.AppleScriptValueParser;
+
 public class CommandUtil {
 	private static Logger logger = Logger.getLogger(CommandUtil.class.toString());
 	private static ScriptEngine se = null;
@@ -48,14 +50,15 @@ public class CommandUtil {
 	}
 
 	public static Object executeCommand(String command) {
-		Object result = null;
+		Object parsedResult = null;
     	try {
     		logger.fine("executeCommand: " + command);
-    		result = se.eval("tell application \"iTunes\"\n" + command + "\nend tell");
+    		Object result = se.eval("tell application \"iTunes\"\n" + command + "\nend tell");
+    		parsedResult = new AppleScriptValueParser().parse(((StringBuilder) result).toString());
     	} catch (ScriptException ex) {
     		ex.printStackTrace();
     	}
-    	return result;
+    	return parsedResult;
 	}
 
 }

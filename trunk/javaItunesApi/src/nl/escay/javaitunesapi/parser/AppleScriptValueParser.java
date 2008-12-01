@@ -43,10 +43,16 @@ public class AppleScriptValueParser {
 	
 	private String input;
 	private int pos;
+	private boolean startsWithList = false;
 
 	public Object parse(String input) {
+		input = input.replace("\n", "");
 		this.input = input;
-		this.pos = 0;
+		pos = 0;
+		skipWhitespace();
+		if (input.length() > pos && peek() == '{') {
+			startsWithList = true;
+		}
 		return parseValue();
 	}
 
@@ -56,9 +62,9 @@ public class AppleScriptValueParser {
 			return "";
 		}
 		switch (peek()) {
-		case '"' : return parseString(); 
-		case '{' : return parseList(); 
-		default: return parsePrimitive();
+			case '"' : return parseString(); 
+			case '{' : return parseList(); 
+			default  : return parseNonString();
 		}
 	}
 	
@@ -109,12 +115,44 @@ public class AppleScriptValueParser {
 		
 	}
 
-	private Object parsePrimitive() {
+	/**
+	 * Parses 'integer', 'real' and 'boolean'
+	 * TODO: date ?!
+	 */
+	private Object parseNonString() {
 		int start = pos;
-		while (pos < input.length() && Character.isDigit(peek())) {
-			pos++;
-		}		
-		return Integer.parseInt(input.substring(start, pos));
+		boolean returnAsDouble = false;
+		if (Character.isDigit(peek())) {
+			while (pos < input.length() && (Character.isDigit(peek()) || peek() == '.')) {
+				if (peek() == '.') {
+					returnAsDouble = true;
+				}
+				pos++;
+			}
+			if (returnAsDouble) {
+				return Double.parseDouble(input.substring(start, pos));
+			} else {
+			    return Integer.parseInt(input.substring(start, pos));
+			}
+		} else {
+			while (pos < input.length() && !(peek() == ',') && !(peek() == '}')) {
+				pos++;
+			}
+			String value = input.substring(start, pos);
+			if (value.equals("true")) {
+			    return new Boolean(true);
+			} else if (value.equals("false")) {
+				return new Boolean(false);
+			} else {
+				if (startsWithList) {
+				    // Enumeration situation, leave it up to the calling side to convert it into an enum
+				    return new AppleScriptEnumeration(value);
+				} else {
+					// There is nu surrounding list, it is not possible to detect a String or Enmeration value
+					return value;
+				}
+			}
+		}
 	}
 
 

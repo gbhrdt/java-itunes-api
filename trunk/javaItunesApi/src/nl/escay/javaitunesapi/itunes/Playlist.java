@@ -22,8 +22,6 @@ package nl.escay.javaitunesapi.itunes;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.script.ScriptException;
-
 import nl.escay.javaitunesapi.utils.CommandUtil;
 import nl.escay.javaitunesapi.utils.ConvertUtil;
 
@@ -78,7 +76,12 @@ public class Playlist extends Item {
 	 * @return int the total length of all songs (in seconds)
 	 */
 	public int getDuration() {
-		// TODO
+		// TODO: fails for 'Films', for now only show for none and Music...
+		String specialKind = getSpecialKind(); // TODO: cache the value...
+		if (specialKind.equals("none") || specialKind.equals("Music") ) {
+		    Object result = CommandUtil.executeCommand("get duration of playlist " + getIndex());
+		    return ConvertUtil.asInteger(result).intValue();
+		}
 		return -1;
 	}
 	
@@ -94,15 +97,8 @@ public class Playlist extends Item {
 	 * Returns the name of the playlist
 	 */
 	public String getName() {
-		String command = "tell application \"iTunes\"\nget name of playlist " + getIndex() + "\nend tell";
-		Object result = null;
-		try {
-			result = CommandUtil.getScriptEngine().eval(command);
-		} catch (ScriptException ex) {
-			ex.printStackTrace();
-			return null;
-		}
-		return ConvertUtil.convertToString(result);
+		Object result = CommandUtil.executeCommand("get name of playlist " + getIndex());
+		return ConvertUtil.asString(result);
 	}
 	
 	/**
@@ -110,7 +106,8 @@ public class Playlist extends Item {
 	 * @return
 	 */
 	public Playlist getParent() {
-		// TODO
+		//Object result = CommandUtil.executeCommand("get parent of playlist " + getIndex());
+		//String test = ConvertUtil.asString(result);
 		return null;
 	}
 	
@@ -127,8 +124,8 @@ public class Playlist extends Item {
 	 * @return true if this playlist is played in random order
 	 */
 	public boolean getShuffle() {
-		// TODO
-		return false;
+		Object result = CommandUtil.executeCommand("get shuffle of playlist " + getIndex());
+		return ConvertUtil.asBoolean(result).booleanValue();
 	}
 
 	/** 
@@ -136,7 +133,8 @@ public class Playlist extends Item {
 	 * @return the total size of all songs in bytes
 	 */
 	public int getSize() {
-		// TODO
+		// Object result = CommandUtil.executeCommand("get total size of playlist " + getIndex());
+		// return ConvertUtil.asInteger(result).intValue();
 		return -1;
 	}
 	
@@ -153,8 +151,8 @@ public class Playlist extends Item {
 	 * @return String off/one/all
 	 */
 	public String getSongRepeat() {
-		// TODO
-		return null;
+		Object result = CommandUtil.executeCommand("get {song repeat} of playlist " + getIndex());
+		return ConvertUtil.asString(result);
 	}
 	
 	/**
@@ -162,8 +160,8 @@ public class Playlist extends Item {
 	 * @return String none/Audiobooks/folder/Movies/Music/Party Shuffle/Podcasts/Purchased Music/TV Shows/Videos
 	 */
 	public String getSpecialKind() {
-	    // TODO
-		return null;
+		Object result = CommandUtil.executeCommand("get {special kind} of playlist " + getIndex());
+		return ConvertUtil.asString(result);
 	}
 	
 	/**
@@ -171,7 +169,8 @@ public class Playlist extends Item {
 	 * @return the length of all songs in MM:SS format
 	 */
 	public String getTime() {
-		// TODO
+		//Object result = CommandUtil.executeCommand("get length of playlist " + getIndex());
+		//return ConvertUtil.asString(result);
 		return null;
 	}
 	
@@ -180,11 +179,11 @@ public class Playlist extends Item {
 	 * @return true if this playlist is visible in the Source list
 	 */
 	public boolean isVisible() {
-		// TODO
-		return false;
+		Object result = CommandUtil.executeCommand("get visible of playlist " + getIndex());
+		return ConvertUtil.asBoolean(result).booleanValue();
 	}
 	
 	public String toString() {
-		return getName() + ", count: " + getCount();
+		return getName();
 	}
 }
