@@ -19,59 +19,44 @@
 
 package nl.escay.javaitunesapi.utils;
 
+import java.util.List;
+
+import nl.escay.javaitunesapi.parser.AppleScriptEnumeration;
+
+
 public class ConvertUtil {
-	public static Boolean convertToBoolean(Object object) {
+	public static Boolean asBoolean(Object parsedObject) {
 		Boolean result = null;
-		if (object instanceof StringBuilder) {
-			try {
-				StringBuilder sb = (StringBuilder) object;
-				String value = sb.toString();
-				// TODO: only expecting 1 value... should another approach be used?
-				value = value.replace("\n", "");
-				result = new Boolean(value);
-			} catch (NumberFormatException nfe) {
-				// Ignore, just return null
-			}
-		}
+        if (parsedObject instanceof Boolean) {
+        	result = (Boolean) parsedObject;
+        }
 		return result;
 	}
 
-	public static Integer convertToInteger(Object object) {
+	public static Integer asInteger(Object parsedObject) {
     	Integer result = null;
-        if (object instanceof StringBuilder) {
-        	try {
-        		StringBuilder sb = (StringBuilder) object;
-        		String value = sb.toString();
-        		// TODO: only expecting 1 value... should another approach be used?
-        		value = value.replace("\n", "");
-        		result = new Integer(value);
-        	} catch (NumberFormatException nfe) {
-        		// Ignore, just return null
-        	}
+        if (parsedObject instanceof Integer) {
+        	result = (Integer) parsedObject;
         }
         return result;
     }
 
-    public static String convertToString(Object object) {
+    public static String asString(Object parsedObject) {
     	String result = null;
-    	if (object instanceof StringBuilder) {
-			StringBuilder sb = (StringBuilder) object;
-			String value = sb.toString();
-			// TODO: only expecting 1 value... should another approach be used?
-			result = value.replace("\n", "");
-			if (result.length() > 2) {
-				// Remove surrounding quotes
-				result = result.substring(1, result.length() -1);
-			}
+    	if (parsedObject instanceof String) {
+    		result = (String) parsedObject;
+    	} else if (parsedObject instanceof List) {
+    		List<?> results = (List<?>) parsedObject;
+    		if (results.size() == 1 && results.get(0) instanceof AppleScriptEnumeration) {
+    		    result = ((AppleScriptEnumeration) results.get(0)).getId();
+    		}
     	}
     	return result;
     }
 
 	public static int convertToInt(Object executeCommand) {
-		Integer value = convertToInteger(executeCommand);
-		if (value == null) {
-			return -1;
-		}
+		Integer value = asInteger(executeCommand);
+		assert(value != null);
 		return value.intValue();
 	}
 }

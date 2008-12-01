@@ -74,14 +74,8 @@ public class Source extends Item {
 	}
 	
     private Integer getNumberOfPlaylists() {
-    	String command = "tell application \"iTunes\"\nget count of playlists\nend tell";
-    	Object result = null;
-    	try {
-    		result = CommandUtil.getScriptEngine().eval(command);
-    	} catch (ScriptException ex) {
-    		ex.printStackTrace();
-    	}
-    	return ConvertUtil.convertToInteger(result);
+    	Object result = CommandUtil.executeCommand("get count of playlists");
+    	return ConvertUtil.asInteger(result);
     }
 	
 	public List<RadioTunerPlaylist> getRadioTunerPlaylists() {
