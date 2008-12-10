@@ -68,8 +68,8 @@ public class ConvertUtil {
     	return result;
     }
 
-	public static int asInt(Object executeCommand) {
-		Integer value = asInteger(executeCommand);
+	public static int asInt(Object parsedObject) {
+		Integer value = asInteger(parsedObject);
 		assert(value != null);
 		return value.intValue();
 	}

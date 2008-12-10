@@ -19,7 +19,9 @@
 
 package nl.escay.javaitunesapi.itunes;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import nl.escay.javaitunesapi.utils.CommandUtil;
 import nl.escay.javaitunesapi.utils.ConvertUtil;
@@ -91,21 +93,82 @@ import nl.escay.javaitunesapi.utils.ConvertUtil;
  */
 public class Track extends Item {
 	
+	private static Logger logger = Logger.getLogger(Track.class.toString());
 	private List<ArtWork> artworks;
 	private Playlist playlist;
+	private List<TrackProperty> trackProperties = new ArrayList<TrackProperty>();
+	private String artist;
+	private String comment;
+	private String name;
+	private int rating;
+	
+	public enum TrackProperty {
+		artist,
+		comment,
+		name,
+		played_count,
+		played_date,
+		rating,
+		rating_kind,
+		rating_of_track
+	}
 
 	public Track() {
 		// TODO: Cannot be used for now, testing with the 
 		// other constructor.
 	}
 
-	public Track(int index, Playlist playlist) {
+	public Track(int index, Playlist playlist, TrackProperty... properties) {
 		super(index);
 		this.playlist = playlist;
 		
-		Object commandResult = CommandUtil.executeCommand("get {artist, name, comment, rating} of track " + getIndex() + " of playlist " + playlist.getIndex());
+		for (TrackProperty property : properties) {
+			trackProperties.add(property);
+		}
+		
+		if (trackProperties.size() == 0) {
+			// Default properties to retrieve
+			trackProperties.add(TrackProperty.name);
+			trackProperties.add(TrackProperty.artist);
+		}
+		
+		String propertiesQuery = "";
+
+		for (TrackProperty property : trackProperties) {
+			if (propertiesQuery.length() > 0) {
+				propertiesQuery = propertiesQuery + ", ";
+			}
+			// Convert enum to query parameter string
+			propertiesQuery += property.name().replace('_', ' ');
+		}
+		
+		Object commandResult = CommandUtil.executeCommand("get {" + propertiesQuery + "} of track " + getIndex() + " of playlist " + playlist.getIndex());
+		if (commandResult.equals("")) {
+			// TODO: how is this possible?
+			return;
+		}
 		List<?> parseResult = (List<?>) commandResult;
-		assert(parseResult.size() == 4);
+		
+		assert(parseResult.size() == trackProperties.size());
+		
+		int i = 0;
+		for (TrackProperty property : trackProperties) {
+		    if (property.equals(TrackProperty.artist)) {
+		    	artist = (String) parseResult.get(i);
+		    }
+		    if (property.equals(TrackProperty.name)) {
+		    	name = (String) parseResult.get(i);
+		    }
+		    if (property.equals(TrackProperty.comment)) {
+		    	comment = (String) parseResult.get(i);
+		    }
+		    if (property.equals(TrackProperty.rating)) {
+		    	Object tmp = parseResult.get(i);
+		    	rating = (Integer) tmp;
+		    }
+		    i++;
+		}
+		logger.fine("Retrieved track: " + this);
 	}
 
 	public List<ArtWork> getArtworks() {
@@ -117,7 +180,12 @@ public class Track extends Item {
 	 * @return the artist/source of the track
 	 */
 	public String getArtist() {
-		return ConvertUtil.asString(CommandUtil.executeCommand("get artist of track " + getIndex() + " of playlist " + playlist.getIndex()));
+		if (trackProperties.contains(TrackProperty.artist)) {
+			return artist;
+		}
+		artist = ConvertUtil.asString(CommandUtil.executeCommand("get artist of track " + getIndex() + " of playlist " + playlist.getIndex()));
+		trackProperties.add(TrackProperty.artist);
+		return artist;
 	}
 	
 	/**
@@ -132,7 +200,12 @@ public class Track extends Item {
 	 * @return String containing the notes
 	 */
 	public String getComment() {
-		return ConvertUtil.asString(CommandUtil.executeCommand("get comment of track " + getIndex() + " of playlist " + playlist.getIndex()));
+		if (trackProperties.contains(TrackProperty.comment)) {
+			return comment;
+		}
+		comment = ConvertUtil.asString(CommandUtil.executeCommand("get comment of track " + getIndex() + " of playlist " + playlist.getIndex()));
+		trackProperties.add(TrackProperty.comment);
+		return comment;
 	}
 	
 	/**
@@ -142,11 +215,20 @@ public class Track extends Item {
 	public void setComment(String comment) {
 		System.out.println("### new comment value:\n" + comment);
 		CommandUtil.executeCommand("set comment of track " + getIndex() + " of playlist " + playlist.getIndex() + " to \"" + comment + "\"");
+		if (!trackProperties.contains(TrackProperty.comment)) {
+		    trackProperties.add(TrackProperty.comment);
+		}
+		this.comment = comment; 
 	}
 
 	@Override
 	public String getName() {
-		return ConvertUtil.asString(CommandUtil.executeCommand("get name of track " + getIndex() + " of playlist " + playlist.getIndex()));
+		if (trackProperties.contains(TrackProperty.name)) {
+			return name;
+		}
+		name = ConvertUtil.asString(CommandUtil.executeCommand("get name of track " + getIndex() + " of playlist " + playlist.getIndex()));
+		trackProperties.add(TrackProperty.name);
+		return name;
 	}
 
 	/**
@@ -189,7 +271,12 @@ public class Track extends Item {
 	 * @return the rating of this track (0 to 100), -1 if failed
 	 */
 	public int getRating() {
-		return ConvertUtil.asInt(CommandUtil.executeCommand("get rating of track " + getIndex() + " of playlist " + playlist.getIndex()));
+		if (trackProperties.contains(TrackProperty.rating)) {
+			return rating;
+		}
+		rating = ConvertUtil.asInt(CommandUtil.executeCommand("get rating of track " + getIndex() + " of playlist " + playlist.getIndex()));
+		trackProperties.add(TrackProperty.rating);
+		return rating;
 	}
 	
 	/**
