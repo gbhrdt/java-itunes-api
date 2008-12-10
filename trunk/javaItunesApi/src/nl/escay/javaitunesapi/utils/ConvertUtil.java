@@ -29,6 +29,13 @@ public class ConvertUtil {
 		Boolean result = null;
         if (parsedObject instanceof Boolean) {
         	result = (Boolean) parsedObject;
+        } else if (parsedObject instanceof String) {
+        	result = Boolean.valueOf((String) parsedObject);
+        } else if (parsedObject instanceof List) {
+        	List<?> results = (List<?>) parsedObject;
+        	if (results.size() == 1 && results.get(0) instanceof Boolean) {
+        		result = (Boolean) results.get(0);
+        	}
         }
 		return result;
 	}
@@ -37,6 +44,13 @@ public class ConvertUtil {
     	Integer result = null;
         if (parsedObject instanceof Integer) {
         	result = (Integer) parsedObject;
+        } else if (parsedObject instanceof String) {
+    		result = Integer.valueOf((String) parsedObject);
+    	} else if (parsedObject instanceof List) {
+    		List<?> results = (List<?>) parsedObject;
+    		if (results.size() == 1 && results.get(0) instanceof Integer) {
+    		    result = (Integer) results.get(0);
+    		}
         }
         return result;
     }
@@ -54,7 +68,7 @@ public class ConvertUtil {
     	return result;
     }
 
-	public static int convertToInt(Object executeCommand) {
+	public static int asInt(Object executeCommand) {
 		Integer value = asInteger(executeCommand);
 		assert(value != null);
 		return value.intValue();

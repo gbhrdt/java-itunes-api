@@ -22,8 +22,6 @@ package nl.escay.javaitunesapi.itunes;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.script.ScriptException;
-
 import nl.escay.javaitunesapi.utils.CommandUtil;
 import nl.escay.javaitunesapi.utils.ConvertUtil;
 
@@ -74,7 +72,7 @@ public class Source extends Item {
 	}
 	
     private Integer getNumberOfPlaylists() {
-    	Object result = CommandUtil.executeCommand("get count of playlists");
+    	Object result = CommandUtil.executeCommand("get {count} of playlists");
     	return ConvertUtil.asInteger(result);
     }
 	

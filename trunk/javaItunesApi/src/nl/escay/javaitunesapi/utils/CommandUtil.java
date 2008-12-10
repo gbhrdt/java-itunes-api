@@ -55,6 +55,7 @@ public class CommandUtil {
     		logger.fine("executeCommand: " + command);
     		Object result = se.eval("tell application \"iTunes\"\n" + command + "\nend tell");
     		parsedResult = new AppleScriptValueParser().parse(((StringBuilder) result).toString());
+    		//logger.info("parsedResult: " + parsedResult);
     	} catch (ScriptException ex) {
     		ex.printStackTrace();
     	}

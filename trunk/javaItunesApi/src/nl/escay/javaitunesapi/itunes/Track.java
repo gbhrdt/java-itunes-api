@@ -154,7 +154,7 @@ public class Track extends Item {
 	 * @return the number of times this track has been played, -1 if failed
 	 */
 	public int getPlayedCount() {
-		return ConvertUtil.convertToInt(CommandUtil.executeCommand("get played count of track " + getIndex() + " of playlist " + playlist.getIndex()));
+		return ConvertUtil.asInt(CommandUtil.executeCommand("get played count of track " + getIndex() + " of playlist " + playlist.getIndex()));
 	}
 
 	/**
@@ -189,7 +189,7 @@ public class Track extends Item {
 	 * @return the rating of this track (0 to 100), -1 if failed
 	 */
 	public int getRating() {
-		return ConvertUtil.convertToInt(CommandUtil.executeCommand("get rating of track " + getIndex() + " of playlist " + playlist.getIndex()));
+		return ConvertUtil.asInt(CommandUtil.executeCommand("get rating of track " + getIndex() + " of playlist " + playlist.getIndex()));
 	}
 	
 	/**

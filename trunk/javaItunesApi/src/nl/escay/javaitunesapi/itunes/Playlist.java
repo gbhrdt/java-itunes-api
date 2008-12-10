@@ -68,7 +68,7 @@ public class Playlist extends Item {
 	 * @return int the size
 	 */
 	public int getCount() {
-		return ConvertUtil.convertToInt(CommandUtil.executeCommand("count of tracks of playlist " + getIndex()));
+		return ConvertUtil.asInt(CommandUtil.executeCommand("count of tracks of playlist " + getIndex()));
 	}
 	
 	/**
@@ -79,7 +79,7 @@ public class Playlist extends Item {
 		// TODO: fails for 'Films', for now only show for none and Music...
 		String specialKind = getSpecialKind(); // TODO: cache the value...
 		if (specialKind.equals("none") || specialKind.equals("Music") ) {
-		    Object result = CommandUtil.executeCommand("get duration of playlist " + getIndex());
+		    Object result = CommandUtil.executeCommand("get {duration} of playlist " + getIndex());
 		    return ConvertUtil.asInteger(result).intValue();
 		}
 		return -1;
@@ -124,7 +124,7 @@ public class Playlist extends Item {
 	 * @return true if this playlist is played in random order
 	 */
 	public boolean getShuffle() {
-		Object result = CommandUtil.executeCommand("get shuffle of playlist " + getIndex());
+		Object result = CommandUtil.executeCommand("get {shuffle} of playlist " + getIndex());
 		return ConvertUtil.asBoolean(result).booleanValue();
 	}
 
