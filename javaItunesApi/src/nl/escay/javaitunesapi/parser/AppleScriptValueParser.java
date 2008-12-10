@@ -43,20 +43,16 @@ public class AppleScriptValueParser {
 	
 	private String input;
 	private int pos;
-	private boolean startsWithList = false;
 
 	public Object parse(String input) {
 		input = input.replace("\n", "");
 		this.input = input;
 		pos = 0;
-		skipWhitespace();
-		if (input.length() > pos && peek() == '{') {
-			startsWithList = true;
-		}
-		return parseValue();
+		
+		return parseValue(false);
 	}
 
-	private Object parseValue() {
+	private Object parseValue(boolean insideList) {
 		skipWhitespace();
 		if (pos >= input.length()) {
 			return "";
@@ -64,7 +60,7 @@ public class AppleScriptValueParser {
 		switch (peek()) {
 			case '"' : return parseString(); 
 			case '{' : return parseList(); 
-			default  : return parseNonString();
+			default  : return parseAsString(insideList);
 		}
 	}
 	
@@ -103,12 +99,12 @@ public class AppleScriptValueParser {
 				return result; 
 			case ',': 
 				pos++;
-				result.add(parseValue());
+				result.add(parseValue(true));
 				skipWhitespace();
 				break;
 			default:
 				skipWhitespace();
-				result.add(parseValue());	
+				result.add(parseValue(true));	
 			}
 		}
 		return result;
@@ -116,43 +112,71 @@ public class AppleScriptValueParser {
 	}
 
 	/**
-	 * Parses 'integer', 'real' and 'boolean'
-	 * TODO: date ?!
+	 * Parses as String, it could be a number, boolean, date, enumeration, etc..
 	 */
-	private Object parseNonString() {
+	private Object parseAsString(boolean insideList) {
 		int start = pos;
-		boolean returnAsDouble = false;
-		if (Character.isDigit(peek())) {
-			while (pos < input.length() && (Character.isDigit(peek()) || peek() == '.')) {
-				if (peek() == '.') {
-					returnAsDouble = true;
+		
+		// Read as String
+		while (pos < input.length() && !(peek() == ',') && !(peek() == '}')) {
+			pos++;
+		}
+		String value = input.substring(start, pos);
+		
+		if (insideList) {
+			// Try to convert to Integer or Double
+			try {
+				if (value.contains(".")) {
+				    return Double.parseDouble(value);
+				} else {
+					return Integer.parseInt(value);
 				}
-				pos++;
+			} catch (NumberFormatException e) {
+				// Continue, try other types
 			}
-			if (returnAsDouble) {
-				return Double.parseDouble(input.substring(start, pos));
-			} else {
-			    return Integer.parseInt(input.substring(start, pos));
-			}
-		} else {
-			while (pos < input.length() && !(peek() == ',') && !(peek() == '}')) {
-				pos++;
-			}
-			String value = input.substring(start, pos);
+			
+			// Try to convert to Boolean
 			if (value.equals("true")) {
-			    return new Boolean(true);
+				return new Boolean(true);
 			} else if (value.equals("false")) {
 				return new Boolean(false);
-			} else {
-				if (startsWithList) {
-				    // Enumeration situation, leave it up to the calling side to convert it into an enum
-				    return new AppleScriptEnumeration(value);
-				} else {
-					// There is nu surrounding list, it is not possible to detect a String or Enmeration value
-					return value;
-				}
 			}
+
+			// Assume it is an Enumeration situation, leave it up to the
+			// calling side to convert it into an enum
+			return new AppleScriptEnumeration(value);
+		} else {
+			// It is impossible to type the value, example problem:
+			/*
+
+			 tell application "iTunes"
+			    get {name, special kind} of playlist 5
+		     end tell
+
+		     result: {"Partyshuffle", Party Shuffle}
+		     
+		     BUT:
+		     get name of playlist 5
+		     result: Partyshuffle
+		     
+		     get special kind of playlist 5
+			 result: Party Shuffle
+			 
+			 So you could say that if there is a single result we cannot parse the result 
+			 into a typed Enumeration, all we can do is return it as a String.
+			 A workaround is to force the result into a list, then we can see
+			 if it is a String or an Enumeration:
+
+		     get {name} of playlist 5
+		     result: {"Partyshuffle}
+		     
+		     get {special kind} of playlist 5
+			 result: {Party Shuffle}
+
+			*/
 		}
+		
+		return value;
 	}
 
 
