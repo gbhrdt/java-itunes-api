@@ -39,6 +39,7 @@ import nl.escay.javaitunesapi.itunes.ITunesSuite;
 import nl.escay.javaitunesapi.itunes.Playlist;
 import nl.escay.javaitunesapi.itunes.Source;
 import nl.escay.javaitunesapi.itunes.Track;
+import nl.escay.javaitunesapi.itunes.Track.TrackProperty;
 
 import org.w3c.dom.Comment;
 import org.w3c.dom.Document;
@@ -67,7 +68,7 @@ public class BackupRatingsIntoMp3 {
 	    	if (playlist.getName().equals("Muziek")) {
 		    	System.out.println("Playlist, index: " + playlist.getIndex() + ", data: " + playlist);
 		    	
-	    		List<Track> tracks = playlist.getTracks();
+	    		List<Track> tracks = playlist.getTracks(TrackProperty.name, TrackProperty.artist, TrackProperty.rating, TrackProperty.comment);
 	    		for (Track track : tracks) {
 	    			System.out.println("Track, index: " + track.getIndex() + ", data: " + track);
 	    		    
@@ -142,7 +143,7 @@ public class BackupRatingsIntoMp3 {
 			int endTag = xmlString.indexOf('>');
 			xmlString = xmlString.substring(endTag + 1);
 		}
-		track.setComment(xmlString);
+		//track.setComment(xmlString);
 	}
 
 	/**

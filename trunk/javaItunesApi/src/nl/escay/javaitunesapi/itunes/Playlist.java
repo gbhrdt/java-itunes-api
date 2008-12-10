@@ -21,7 +21,9 @@ package nl.escay.javaitunesapi.itunes;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
+import nl.escay.javaitunesapi.itunes.Track.TrackProperty;
 import nl.escay.javaitunesapi.utils.CommandUtil;
 import nl.escay.javaitunesapi.utils.ConvertUtil;
 
@@ -42,6 +44,8 @@ import nl.escay.javaitunesapi.utils.ConvertUtil;
  */
 public class Playlist extends Item {
 	
+	private static Logger logger = Logger.getLogger(Playlist.class.toString());
+	
 	public Playlist() {
 		super();
 	}
@@ -52,12 +56,15 @@ public class Playlist extends Item {
 
 	private List<Track> tracks;
 
-	public List<Track> getTracks() {
+	public List<Track> getTracks(TrackProperty... trackProperties) {
 		tracks = new ArrayList<Track>();
 		int numberOfTracks = getCount();
 		if (numberOfTracks > 0) {
 			for(int i = 1; i <= numberOfTracks;i++) {
-				tracks.add(new Track(i, this));
+				tracks.add(new Track(i, this, trackProperties));
+				if (i % 20 == 1) {
+			        logger.info("processing track " + i + " of " + numberOfTracks);
+				}
 			}
 		}
 		return tracks;
