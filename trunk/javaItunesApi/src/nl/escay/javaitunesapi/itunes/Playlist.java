@@ -45,6 +45,7 @@ import nl.escay.javaitunesapi.utils.ConvertUtil;
 public class Playlist extends Item {
 	
 	private static Logger logger = Logger.getLogger(Playlist.class.toString());
+	private List<Track> tracks;
 	
 	public Playlist() {
 		super();
@@ -54,17 +55,67 @@ public class Playlist extends Item {
 		super(index);
 	}
 
-	private List<Track> tracks;
-
-	public List<Track> getTracks(TrackProperty... trackProperties) {
+	/**
+	 * Returns all tracks in this playlist.
+	 * For performance the requested properties of the Track can be specified.
+	 * @param requestedProperties The track properties that will be retrieved.
+	 * @return A list of Tracks in the playlist.
+	 */
+	public List<Track> getTracks(TrackProperty... requestedProperties) {
 		tracks = new ArrayList<Track>();
 		int numberOfTracks = getCount();
 		if (numberOfTracks > 0) {
-			for(int i = 1; i <= numberOfTracks;i++) {
-				tracks.add(new Track(i, this, trackProperties));
-				if (i % 20 == 1) {
-			        logger.info("processing track " + i + " of " + numberOfTracks);
+			List<TrackProperty> trackProperties = new ArrayList<TrackProperty>();
+			
+			for (TrackProperty property : requestedProperties) {
+				trackProperties.add(property);
+			}
+			
+			if (trackProperties.size() == 0) {
+				// Default properties to retrieve
+				trackProperties.add(TrackProperty.artist);
+				trackProperties.add(TrackProperty.id);
+				trackProperties.add(TrackProperty.kind);
+				trackProperties.add(TrackProperty.name);
+			}
+			
+			String propertiesQuery = "";
+
+			for (TrackProperty property : trackProperties) {
+				if (propertiesQuery.length() > 0) {
+					propertiesQuery = propertiesQuery + ", ";
 				}
+				// Convert enum to query parameter string
+				propertiesQuery += property.name().replace('_', ' ');
+			}
+			
+			// get {id, name, artist} of every track of library playlist 1
+			Object commandResult = CommandUtil.executeCommand("get {" + propertiesQuery + "} of every track of playlist " + getIndex());
+			if (commandResult instanceof List<?>) {
+				List<?> parseResult = (List<?>) commandResult;
+				
+				// Expecting a List containing a List for each TrackProperty
+				assert(parseResult.size() == trackProperties.size());
+				
+				// Validate that each TrackProperty list has the same length as the number of tracks in the playlist
+				for(int i = 0; i < trackProperties.size();i++) {
+					List<?> trackPropertyList = (List<?>) parseResult.get(i);
+					assert(numberOfTracks == trackPropertyList.size());
+				}
+				
+				// Construct tracks from the parseResult
+				for (int trackNumber = 0; trackNumber < numberOfTracks; trackNumber++) {
+					Track track = new Track(trackNumber + 1, this);
+					int i = 0;
+					for (TrackProperty property : trackProperties) {
+						List<?> trackPropertyList = (List<?>) parseResult.get(i);
+						track.setProperty(property, trackPropertyList.get(trackNumber));
+						i++;
+					}
+					tracks.add(track);
+				}
+			} else {
+				// HMM.... not a normal playlist ??! or no tracks??
 			}
 		}
 		return tracks;

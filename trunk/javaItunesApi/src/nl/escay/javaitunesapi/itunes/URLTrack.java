@@ -27,4 +27,7 @@ package nl.escay.javaitunesapi.itunes;
  */
 public class URLTrack extends Track {
 
+	public URLTrack(int index, Playlist playlist) {
+		super(index, playlist);
+	}
 }

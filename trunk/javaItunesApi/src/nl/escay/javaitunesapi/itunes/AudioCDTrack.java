@@ -21,4 +21,8 @@ package nl.escay.javaitunesapi.itunes;
 
 public class AudioCDTrack extends Track {
 //	location (alias, r/o) : the location of the file represented by this track
+
+	public AudioCDTrack(int index, Playlist playlist) {
+		super(index, playlist);
+	}
 }

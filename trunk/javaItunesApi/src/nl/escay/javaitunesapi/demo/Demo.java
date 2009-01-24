@@ -62,7 +62,6 @@ public class Demo {
 	    		for (Track track : tracks) {
 	    			System.out.println("Track: " + track);
 	    		}
-	    		//return;
 	    	}
 	    }
 

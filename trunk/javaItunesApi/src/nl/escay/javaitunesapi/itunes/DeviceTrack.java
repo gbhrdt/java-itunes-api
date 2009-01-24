@@ -24,4 +24,8 @@ package nl.escay.javaitunesapi.itunes;
  */
 public class DeviceTrack extends Track {
 //	contained by device playlists.
+
+	public DeviceTrack(int index, Playlist playlist) {
+		super(index, playlist);
+	}
 }

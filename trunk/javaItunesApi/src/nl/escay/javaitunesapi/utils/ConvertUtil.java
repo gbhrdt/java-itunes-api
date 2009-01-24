@@ -19,6 +19,7 @@
 
 package nl.escay.javaitunesapi.utils;
 
+import java.util.Date;
 import java.util.List;
 
 import nl.escay.javaitunesapi.parser.AppleScriptEnumeration;
@@ -72,5 +73,15 @@ public class ConvertUtil {
 		Integer value = asInteger(parsedObject);
 		assert(value != null);
 		return value.intValue();
+	}
+
+	public static double asDouble(Object property) {
+		// TODO
+		return 0;
+	}
+
+	public static Date asDate(Object property) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

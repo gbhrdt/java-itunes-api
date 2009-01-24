@@ -23,6 +23,7 @@ package nl.escay.javaitunesapi.itunes;
  * An item
  */
 public class Item {
+	private int id = -1;
 	private int index = -1;
 	
 	public Item() {}
@@ -40,10 +41,18 @@ public class Item {
 	 * Returns the id of the item
 	 */
 	public int getId() {
-		// TODO
-		return -1;
+		return id;
 	}
 
+	/**
+	 * Sets the id, only to be used when data is constructed from AppleScript results.
+	 * It is not possible to update the id of an Item
+	 * @param id the id of this Item
+	 */
+	protected void setId(int id) {
+		this.id = id;
+	}
+	
 	/**
 	 * Returns the index of the item in the internal application order
 	 */
