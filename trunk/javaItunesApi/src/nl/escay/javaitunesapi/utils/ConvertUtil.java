@@ -75,13 +75,24 @@ public class ConvertUtil {
 		return value.intValue();
 	}
 
-	public static double asDouble(Object property) {
-		// TODO
-		return 0;
+	public static double asDouble(Object parsedObject) {
+		throw new RuntimeException("Not implemented yet");
 	}
 
-	public static Date asDate(Object property) {
-		// TODO Auto-generated method stub
-		return null;
+	public static Date asDate(Object parsedObject) {
+		Date result = null;
+		if (parsedObject instanceof String) {
+			String value = (String) parsedObject;
+			if (value.equals("missing value")) {
+				return null;
+			} else {
+				// TODO, use formatter...
+				Date test = new Date(value);
+			}
+    	} else if (parsedObject instanceof List) {
+    		List<?> results = (List<?>) parsedObject;
+    		// TODO
+    	}
+		return result;
 	}
 }

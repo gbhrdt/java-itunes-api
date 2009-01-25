@@ -23,7 +23,10 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -68,7 +71,7 @@ public class BackupRatingsIntoMp3 {
 	    	if (playlist.getName().equals("Muziek")) {
 		    	System.out.println("Playlist, index: " + playlist.getIndex() + ", data: " + playlist);
 		    	
-	    		List<Track> tracks = playlist.getTracks(TrackProperty.name, TrackProperty.artist, TrackProperty.rating, TrackProperty.comment);
+	    		List<Track> tracks = playlist.getTracks(TrackProperty.name, TrackProperty.artist, TrackProperty.rating, TrackProperty.played_count, TrackProperty.played_date, TrackProperty.comment);
 	    		for (Track track : tracks) {
 	    			System.out.println("Track, index: " + track.getIndex() + ", data: " + track);
 	    		    
@@ -89,7 +92,7 @@ public class BackupRatingsIntoMp3 {
 		setTrackXml(track, track.getRating(), track.getPlayedCount(), track.getPlayedDate(), track.getComment());
 	}
 	
-	private static void setTrackXml(Track track, int rating, int playedCount, String playedDate, String comment) {
+	private static void setTrackXml(Track track, int rating, int playedCount, Date playedDate, String comment) {
 		String xmlString = null;
 		DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder docBuilder;
@@ -107,7 +110,9 @@ public class BackupRatingsIntoMp3 {
 			
 			Element playedDateElement = doc.createElement("playeddate");
 			if (playedDate != null) {
-			    playedDateElement.appendChild(doc.createTextNode(playedDate));
+				// Save as "Mon, Apr 01, 2002"
+				SimpleDateFormat dateFormat = new SimpleDateFormat("E, MMM dd, yyyy", Locale.ENGLISH);
+			    playedDateElement.appendChild(doc.createTextNode(dateFormat.format(playedDate)));
 			}
 			Element originalCommentElement = doc.createElement("originalcomment");
 			if (comment != null) {
@@ -143,7 +148,11 @@ public class BackupRatingsIntoMp3 {
 			int endTag = xmlString.indexOf('>');
 			xmlString = xmlString.substring(endTag + 1);
 		}
-		//track.setComment(xmlString);
+		
+		// Only update the track if the comments have changed
+		if (!track.getComment().equals(xmlString)) {
+		    track.setComment(xmlString);
+		}
 	}
 
 	/**
@@ -156,7 +165,7 @@ public class BackupRatingsIntoMp3 {
 	private static void updateTrackXml(Track track) {
 		int rating = 0;
 		int playedCount = 0;
-		String playedDate = null;
+		Date playedDate = null;
 		String originalComment = null;
 		
 		DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();

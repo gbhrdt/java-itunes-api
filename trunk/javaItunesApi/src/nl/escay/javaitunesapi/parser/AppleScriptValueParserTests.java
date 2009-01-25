@@ -21,8 +21,12 @@ package nl.escay.javaitunesapi.parser;
 
 import static org.junit.Assert.assertEquals;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import org.junit.Test;
 
@@ -66,8 +70,7 @@ public class AppleScriptValueParserTests {
 		// String in a list
         assertEquals(list(), new AppleScriptValueParser().parse("{}")); 
 		assertEquals(list("hi there"), new AppleScriptValueParser().parse("{\"hi there\"}")); 
-		assertEquals(list(12, "hi there", list()), new AppleScriptValueParser().parse("{12, \"hi there\", {}}")); 
-		//TODO: assertEquals(TODO), new ScriptValueParser().parse("{\"hello\", variable, 5.55, date \"Monday, April 1, 2002\", true, {3, \"another\", \"list\"}}")); 
+		assertEquals(list(12, "hi there", list()), new AppleScriptValueParser().parse("{12, \"hi there\", {}}"));
 	}
 	
 	@Test
@@ -104,6 +107,36 @@ public class AppleScriptValueParserTests {
 		assertEquals(list(new Double(123)), new AppleScriptValueParser().parse("{123.}"));
 		assertEquals("-1.234", new AppleScriptValueParser().parse("-1.234"));
 		assertEquals(list(new Double(-1.234)), new AppleScriptValueParser().parse("{-1.234}"));
+	}
+	
+	@Test
+	public void testDate() {
+		// TODO: How to deal with other Locales.... ?! We depend on the Locale in use by iTunes...
+		SimpleDateFormat dateFormat = new SimpleDateFormat("E, MMM dd, yyyy HH:mm:ss", Locale.ENGLISH);
+		Date date = null;
+		try {
+			date = dateFormat.parse("Monday, April 1, 2002 00:00:00");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		SimpleDateFormat dateFormat2 = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss", new Locale("nl", "NL"));
+		Date dutchDate = null;
+		try {
+			dutchDate = dateFormat2.parse("woensdag, 21 mei 2008 16:28:42");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		SimpleDateFormat dateFormat3 = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss"); // Warning: this test only runs correctly when default locale is new Locale("nl", "NL")
+		try {
+			dateFormat3.parse("woensdag, 21 mei 2008 16:28:42");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		assertEquals(dutchDate, new AppleScriptValueParser().parse("date \"woensdag, 21 mei 2008 16:28:42\"")); 
+		assertEquals(list(dutchDate), new AppleScriptValueParser().parse("{date \"woensdag, 21 mei 2008 16:28:42\"}"));
 	}
 	
 	@SuppressWarnings("unchecked")
