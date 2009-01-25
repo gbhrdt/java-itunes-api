@@ -19,7 +19,10 @@
 
 package nl.escay.javaitunesapi.parser;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -37,7 +40,6 @@ import java.util.List;
  * Record Example:
  * {name:"Stephen", height:74.5, weight:175}
  * 
- * TODO: support Double (real/number) results
  */
 public class AppleScriptValueParser {
 	
@@ -122,6 +124,30 @@ public class AppleScriptValueParser {
 			pos++;
 		}
 		String value = input.substring(start, pos);
+		
+		if (value.startsWith("date ")) {
+			// date is formatted like: date "woensdag, 21 mei 2008 16:28:42"
+			// however we stopped after the first ','
+			
+			// Second:
+			pos++;
+			while (pos < input.length() && !(peek() == ',') && !(peek() == '}')) {
+				pos++;
+			}
+			
+			value = input.substring(start, pos);
+			value = value.replace("date ", "");
+			value = value.replace("\"", "");
+			// TODO: the following DateFormat only works when Locale is Dutch
+			SimpleDateFormat dateFormat = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss"); // woensdag, 21 mei 2008 16:28:42
+			Date date = null;
+			try {
+				date = dateFormat.parse(value);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			return date;
+		}
 		
 		if (insideList) {
 			// Try to convert to Integer or Double

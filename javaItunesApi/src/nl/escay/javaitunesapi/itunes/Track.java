@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
+import nl.escay.javaitunesapi.parser.AppleScriptEnumeration;
 import nl.escay.javaitunesapi.utils.CommandUtil;
 import nl.escay.javaitunesapi.utils.ConvertUtil;
 
@@ -44,7 +45,7 @@ import nl.escay.javaitunesapi.utils.ConvertUtil;
 	bookmarkable (boolean) : is the playback position for this track remembered?
 	bpm (integer) : the tempo of this track in beats per minute
 	category (text) : the category of the track
-	#comment (text) : freeform notes about the track
+	comment (text) : freeform notes about the track
 	compilation (boolean) : is this track from a compilation album?
 	composer (text) : the composer of the track
 	database ID (integer, r/o) : the common, unique ID for this track. If two tracks in different playlists have the same database ID, they are sharing the same data.
@@ -210,7 +211,7 @@ public class Track extends Item {
 	private Date modification_date;
 	private String name;
 	private int played_count;
-	private String played_date;
+	private Date played_date;
 	private Playlist playlist;
 	private boolean podcast;
 	private int rating;
@@ -478,9 +479,9 @@ public class Track extends Item {
 	 * 
 	 * @return the date and time this track was last played
 	 */
-	public String getPlayedDate() {
+	public Date getPlayedDate() {
 		// TODO: return Date type?!
-		return ConvertUtil.asString(getProperty(TrackProperty.played_date));
+		return ConvertUtil.asDate(getProperty(TrackProperty.played_date));
 	}
 
 	/**
@@ -816,22 +817,72 @@ public class Track extends Item {
 	 * Convenience method to construct Track data, without persisting it
 	 */
 	public void setProperty(TrackProperty property, Object value) {
+		if (value instanceof AppleScriptEnumeration) {
+			if (((AppleScriptEnumeration) value).getId().equals("missing value")) {
+				value = null;
+			}
+		}
 		trackProperties.add(property);
 		switch (property) {
-		    case id:
-		    	// Set the internal id of this Item
-		    	setId((Integer) value);
-		    	break;
-		    case kind:
-		    	kind = (String) value;
-		    	break;
-		    case name:
-		    	name = (String) value;
-		    	break;
-		    case artist:
-		    	artist = (String) value;
-		    	break;
-		    default:
+			case id: setId((Integer) value); break;
+			case name: name = (String) value; break;
+			case album: album = (String) value; break;
+			case album_artist: album_artist = (String) value; break;
+			case album_rating: album_rating = (Integer) value; break;
+			case album_rating_kind: album_rating_kind = (RatingKind) value; break;
+			case artist: artist = (String) value; break;
+			case bit_rate: bit_rate = (Integer) value; break;
+			case bookmark: bookmark = (Double) value; break;
+			case bookmarkable: bookmarkable = (Boolean) value; break;
+			case bpm: bpm = (Integer) value; break;
+			case category: category = (String) value; break;
+			case comment: comment = (String) value; break;
+			case compilation: compilation = (Boolean) value; break;
+			case composer: composer = (String) value; break;
+			case database_ID: database_ID = (Integer) value; break;
+			case date_added: date_added = (Date) value; break;
+			case description: description = (String) value; break;
+			case disc_count: disc_count = (Integer) value; break;
+			case disc_number: disc_number = (Integer) value; break;
+			case duration: duration = (Double) value; break;
+			case enabled: enabled = (Boolean) value; break;
+			case episode_ID: episode_ID = (String) value; break;
+			case episode_number: episode_number = (Integer) value; break;
+			case EQ: EQ = (String) value; break;
+			case finish: finish = (Double) value; break;
+			case gapless: gapless = (Boolean) value; break;
+			case genre: genre = (String) value; break;
+			case grouping: grouping = (String) value; break;
+			case kind: kind = (String) value; break;
+			case long_description: long_description = (String) value; break;
+			case lyrics: lyrics = (String) value; break;
+			case modification_date: modification_date = (Date) value; break;
+			case played_count: played_count = (Integer) value; break;
+			case played_date: played_date = (Date) value; break;
+			case podcast: podcast = (Boolean) value; break;
+			case rating: rating = (Integer) value; break;
+			case rating_kind: rating_kind = (RatingKind) value; break;
+			case sample_rate: sample_rate = (Integer) value; break;
+			case season_number: season_number = (Integer) value; break;
+			case shufflable: shufflable = (Boolean) value; break;
+			case skipped_count: skipped_count = (Integer) value; break;
+			case skipped_date: skipped_date = (Date) value; break;
+			case show: show = (String) value; break;
+			case sort_album: sort_album = (String) value; break;
+			case sort_artist: sort_artist = (String) value; break;
+			case sort_album_artist: sort_album_artist = (String) value; break;
+			case sort_name: sort_name = (String) value; break;
+			case sort_composer: sort_composer = (String) value; break;
+			case sort_show: sort_show = (String) value; break;
+			case size: size = (Integer) value; break;
+			case start: start = (Double) value; break;
+			case time: time = (String) value; break;
+			case track_count: track_count = (Integer) value; break;
+			case track_number: track_number = (Integer) value; break;
+			case unplayed: unplayed = (Boolean) value; break;
+			case video_kind: video_kind = (VideoKind) value; break;
+			case volume_adjustment: volume_adjustment = (Integer) value; break;
+			case year: year = (Integer) value; break;
 		}
 	}
 
