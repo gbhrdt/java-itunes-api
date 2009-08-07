@@ -1,5 +1,5 @@
 /*
- * Copyright 2008 Ronald Martijn Morrien
+ * Copyright 2008,2009 Ronald Martijn Morrien
  * 
  * This file is part of java-itunes-api.
  *
@@ -126,10 +126,18 @@ public class AppleScriptValueParser {
 		String value = input.substring(start, pos);
 		
 		if (value.startsWith("date ")) {
-			// date is formatted like: date "woensdag, 21 mei 2008 16:28:42"
+			//System.out.println("### date value 1: " + input.substring(start, input.length()));
+			// date is formatted like: date "woensdag, 21 mei 2008 16:28:42" for Duth Locale
+			// date is formatted like: Tuesday, November 18, 2008 6:02:45 AM for English locale
 			// however we stopped after the first ','
 			
 			// Second:
+			pos++;
+			while (pos < input.length() && !(peek() == ',') && !(peek() == '}')) {
+				pos++;
+			}
+			
+			// Third (English locale):
 			pos++;
 			while (pos < input.length() && !(peek() == ',') && !(peek() == '}')) {
 				pos++;
@@ -139,9 +147,11 @@ public class AppleScriptValueParser {
 			value = value.replace("date ", "");
 			value = value.replace("\"", "");
 			// TODO: the following DateFormat only works when Locale is Dutch
-			SimpleDateFormat dateFormat = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss"); // woensdag, 21 mei 2008 16:28:42
+			//SimpleDateFormat dateFormat = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss"); // woensdag, 21 mei 2008 16:28:42
+			SimpleDateFormat dateFormat = new SimpleDateFormat("E, MMM dd, yyyy hh:mm:ss aa"); // Monday, April 28, 2008 6:02:45 AM
 			Date date = null;
 			try {
+				System.out.println("### date value 2: " + value);
 				date = dateFormat.parse(value);
 			} catch (ParseException e) {
 				e.printStackTrace();

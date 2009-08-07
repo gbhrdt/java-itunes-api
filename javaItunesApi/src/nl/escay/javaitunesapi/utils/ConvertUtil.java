@@ -1,5 +1,5 @@
 /*
- * Copyright 2008 Ronald Martijn Morrien
+ * Copyright 2008,2009 Ronald Martijn Morrien
  * 
  * This file is part of java-itunes-api.
  *
@@ -32,7 +32,7 @@ public class ConvertUtil {
         	result = (Boolean) parsedObject;
         } else if (parsedObject instanceof String) {
         	result = Boolean.valueOf((String) parsedObject);
-        } else if (parsedObject instanceof List) {
+        } else if (parsedObject instanceof List<?>) {
         	List<?> results = (List<?>) parsedObject;
         	if (results.size() == 1 && results.get(0) instanceof Boolean) {
         		result = (Boolean) results.get(0);
@@ -47,7 +47,7 @@ public class ConvertUtil {
         	result = (Integer) parsedObject;
         } else if (parsedObject instanceof String) {
     		result = Integer.valueOf((String) parsedObject);
-    	} else if (parsedObject instanceof List) {
+    	} else if (parsedObject instanceof List<?>) {
     		List<?> results = (List<?>) parsedObject;
     		if (results.size() == 1 && results.get(0) instanceof Integer) {
     		    result = (Integer) results.get(0);
@@ -60,7 +60,7 @@ public class ConvertUtil {
     	String result = null;
     	if (parsedObject instanceof String) {
     		result = (String) parsedObject;
-    	} else if (parsedObject instanceof List) {
+    	} else if (parsedObject instanceof List<?>) {
     		List<?> results = (List<?>) parsedObject;
     		if (results.size() == 1 && results.get(0) instanceof AppleScriptEnumeration) {
     		    result = ((AppleScriptEnumeration) results.get(0)).getId();
@@ -89,7 +89,7 @@ public class ConvertUtil {
 				// TODO, use formatter...
 				Date test = new Date(value);
 			}
-    	} else if (parsedObject instanceof List) {
+    	} else if (parsedObject instanceof List<?>) {
     		List<?> results = (List<?>) parsedObject;
     		// TODO
     	}
