@@ -1,5 +1,5 @@
 /*
- * Copyright 2008 Ronald Martijn Morrien
+ * Copyright 2008,2009 Ronald Martijn Morrien
  * 
  * This file is part of java-itunes-api.
  *

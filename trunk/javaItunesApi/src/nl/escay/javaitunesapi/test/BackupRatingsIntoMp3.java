@@ -1,5 +1,5 @@
 /*
- * Copyright 2008 Ronald Martijn Morrien
+ * Copyright 2008,2009 Ronald Martijn Morrien
  * 
  * This file is part of java-itunes-api.
  *
@@ -68,7 +68,7 @@ public class BackupRatingsIntoMp3 {
 	    List<Playlist> playLists = source.getPlaylists();
 	    System.out.println("Playlists: " + playLists);
 	    for (Playlist playlist : playLists) {
-	    	if (playlist.getName().equals("Muziek")) {
+	    	if (playlist.getName().equals("Music") || playlist.getName().equals("Muziek")) {
 		    	System.out.println("Playlist, index: " + playlist.getIndex() + ", data: " + playlist);
 		    	
 	    		List<Track> tracks = playlist.getTracks(TrackProperty.name, TrackProperty.artist, TrackProperty.rating, TrackProperty.played_count, TrackProperty.played_date, TrackProperty.comment);

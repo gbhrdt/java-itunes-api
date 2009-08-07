@@ -1,5 +1,5 @@
 /*
- * Copyright 2008 Ronald Martijn Morrien
+ * Copyright 2008,2009 Ronald Martijn Morrien
  * 
  * This file is part of java-itunes-api.
  *
@@ -858,7 +858,9 @@ public class Track extends Item {
 			case lyrics: lyrics = (String) value; break;
 			case modification_date: modification_date = (Date) value; break;
 			case played_count: played_count = (Integer) value; break;
-			case played_date: played_date = (Date) value; break;
+			case played_date:
+				System.out.println("### VALUE = " + value);
+				played_date = (Date) value; break;
 			case podcast: podcast = (Boolean) value; break;
 			case rating: rating = (Integer) value; break;
 			case rating_kind: rating_kind = (RatingKind) value; break;
