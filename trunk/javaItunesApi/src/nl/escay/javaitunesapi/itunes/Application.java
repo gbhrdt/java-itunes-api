@@ -44,7 +44,7 @@ import nl.escay.javaitunesapi.utils.ConvertUtil;
 		# full screen (boolean) : are visuals displayed using the entire screen?
 		# name (text, r/o) : the name of the application
 		# mute (boolean) : has the sound output been muted?
-		player position (integer) : the player’s position within the currently playing track in seconds.
+		# `player position (integer) : the player’s position within the currently playing track in seconds.
 		# player state (stopped/playing/paused/fast forwarding/rewinding, r/o) : is iTunes stopped, paused, or playing?
 		selection (specifier, r/o) : the selection visible to the user
 		# sound volume (integer) : the sound output volume (0 = minimum, 100 = maximum)
@@ -182,6 +182,22 @@ public class Application {
 		}
 		// Fallback mechanism
 		return false;
+	}
+
+	/**
+	 * Returns the player’s position within the currently playing track in seconds.
+	 * @return The player’s position within the currently playing track in seconds.
+	 */
+	public void setPlayerPosition(int value) {
+		CommandUtil.executeCommand("set player position to " + value);
+	}
+
+	/**
+	 * Returns the player’s position within the currently playing track in seconds.
+	 * @return The player’s position within the currently playing track in seconds.
+	 */
+	public int getPlayerPosition() {
+		return ConvertUtil.asInt(CommandUtil.executeCommand("get player position"));
 	}
 
 	/**
