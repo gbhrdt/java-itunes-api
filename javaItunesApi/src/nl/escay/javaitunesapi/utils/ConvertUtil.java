@@ -46,7 +46,11 @@ public class ConvertUtil {
         if (parsedObject instanceof Integer) {
         	result = (Integer) parsedObject;
         } else if (parsedObject instanceof String) {
-    		result = Integer.valueOf((String) parsedObject);
+        	if ("".equals((String) parsedObject)) {
+        	    return new Integer(0);
+        	} else {
+    		    result = Integer.valueOf((String) parsedObject);
+        	}
     	} else if (parsedObject instanceof List<?>) {
     		List<?> results = (List<?>) parsedObject;
     		if (results.size() == 1 && results.get(0) instanceof Integer) {

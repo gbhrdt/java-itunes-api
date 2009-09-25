@@ -74,7 +74,85 @@ public class ITunesSuite {
     	}
     }
     
+    public void play() {
+    	String command = "tell application \"itunes\" to play";
+    	try {
+    		CommandUtil.getScriptEngine().eval(command);
+    		logger.info("iTunes play currently selected track");
+    	} catch (ScriptException ex) {
+    		ex.printStackTrace();
+    	}
+    }
+
+    public void playPause() {
+    	String command = "tell application \"itunes\" to playpause";
+    	try {
+    		CommandUtil.getScriptEngine().eval(command);
+    		logger.info("iTunes playpause currently selected track");
+    	} catch (ScriptException ex) {
+    		ex.printStackTrace();
+    	}
+    }
+
+    public void pause() {
+    	String command = "tell application \"itunes\" to pause";
+    	try {
+    		CommandUtil.getScriptEngine().eval(command);
+    		logger.info("iTunes pause currently selected track");
+    	} catch (ScriptException ex) {
+    		ex.printStackTrace();
+    	}
+    }
+
+    public void fastForward() {
+    	String command = "tell application \"itunes\" to fast forward";
+    	try {
+    		CommandUtil.getScriptEngine().eval(command);
+    		logger.info("iTunes fast forward currently selected track");
+    	} catch (ScriptException ex) {
+    		ex.printStackTrace();
+    	}
+    }
+
+    public void rewind() {
+    	String command = "tell application \"itunes\" to rewind";
+    	try {
+    		CommandUtil.getScriptEngine().eval(command);
+    		logger.info("iTunes rewind currently selected track");
+    	} catch (ScriptException ex) {
+    		ex.printStackTrace();
+    	}
+    }
+
+    /**
+     * disable fast forward/rewind and resume playback, if playing.
+     */
+    public void resume() {
+    	String command = "tell application \"itunes\" to resume";
+    	try {
+    		CommandUtil.getScriptEngine().eval(command);
+    		logger.info("iTunes resume currently selected track");
+    	} catch (ScriptException ex) {
+    		ex.printStackTrace();
+    	}
+    }
+    
+    /**
+     * stop playback
+     */
     public void stop() {
+    	String command = "tell application \"itunes\" to stop";
+    	try {
+    		CommandUtil.getScriptEngine().eval(command);
+    	} catch (ScriptException ex) {
+    		ex.printStackTrace();
+    	}
+    }
+    
+    /**
+     * Quits iTunes
+     */
+    public void quit() {
     	String command = "tell application \"itunes\" to quit";
         try {
         	CommandUtil.getScriptEngine().eval(command);
@@ -82,6 +160,55 @@ public class ITunesSuite {
         } catch (ScriptException ex) {
             ex.printStackTrace();
         }
+    }
+    
+    /**
+     * reposition to beginning of current track or go to previous track 
+     * if already at start of current track
+     */
+    public void backTrack() {
+    	String command = "tell application \"itunes\" to back track";
+    	try {
+    		CommandUtil.getScriptEngine().eval(command);
+    	} catch (ScriptException ex) {
+    		ex.printStackTrace();
+    	}
+    }
+
+    /**
+     * return to the previous track in the current playlist
+     */
+    public void previousTrack() {
+    	String command = "tell application \"itunes\" to previous track";
+    	try {
+    		CommandUtil.getScriptEngine().eval(command);
+    	} catch (ScriptException ex) {
+    		ex.printStackTrace();
+    	}
+    }
+    
+    /**
+     * advance to the next track in the current playlist
+     */
+    public void nextTrack() {
+    	String command = "tell application \"itunes\" to next track";
+    	try {
+    		CommandUtil.getScriptEngine().eval(command);
+    	} catch (ScriptException ex) {
+    		ex.printStackTrace();
+    	}
+    }
+
+    /**
+     * update file track information from the current information in the track’s file
+     */
+    public void refresh() {
+    	String command = "tell application \"itunes\" to refresh";
+    	try {
+    		CommandUtil.getScriptEngine().eval(command);
+    	} catch (ScriptException ex) {
+    		ex.printStackTrace();
+    	}
     }
     
     public void test() {
