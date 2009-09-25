@@ -1,13 +1,16 @@
 package nl.escay.itunes.djratingtool;
 
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.prefs.Preferences;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.Timer;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -34,6 +37,7 @@ public class DjRatingTool extends Application {
 	private static final String DJ_RATING_TOOL = "DJ Rating Tool";
 	ITunesSuite iTunes;
 	private JFrame frame;
+	private PreferencesFrame preferencesFrame = new PreferencesFrame();
 	
     public static void main(String[] args) {
     	// Make menus part of OSX menu and use OSX look and feel
@@ -131,7 +135,7 @@ public class DjRatingTool extends Application {
         needleDropBigBackwardButton.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
         		int seconds = iTunes.getApplication().getPlayerPosition();
-        		iTunes.getApplication().setPlayerPosition(seconds - 40);
+        		iTunes.getApplication().setPlayerPosition(seconds - preferencesFrame.getLargeNeedleDropTime());
         	}});
         panel.add(needleDropBigBackwardButton);
 
@@ -139,7 +143,7 @@ public class DjRatingTool extends Application {
         needleDropBackwardButton.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
         		int seconds = iTunes.getApplication().getPlayerPosition();
-        		iTunes.getApplication().setPlayerPosition(seconds - 20);
+        		iTunes.getApplication().setPlayerPosition(seconds - preferencesFrame.getNeedleDropTime());
         	}});
         panel.add(needleDropBackwardButton);
 
@@ -147,7 +151,7 @@ public class DjRatingTool extends Application {
         needleDropForwardButton.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
         		int seconds = iTunes.getApplication().getPlayerPosition();
-        		iTunes.getApplication().setPlayerPosition(seconds + 20);
+        		iTunes.getApplication().setPlayerPosition(seconds + preferencesFrame.getNeedleDropTime());
         	}});
         panel.add(needleDropForwardButton);
 
@@ -155,7 +159,7 @@ public class DjRatingTool extends Application {
         needleDropBigForwardButton.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
         		int seconds = iTunes.getApplication().getPlayerPosition();
-        		iTunes.getApplication().setPlayerPosition(seconds + 40);
+        		iTunes.getApplication().setPlayerPosition(seconds + preferencesFrame.getLargeNeedleDropTime());
         	}});
         panel.add(needleDropBigForwardButton);
 
@@ -200,17 +204,14 @@ public class DjRatingTool extends Application {
 	}
 	
 	private class DjRatingToolApplicationAdapter extends ApplicationAdapter {
-	     //public void handleAbout(ApplicationEvent event) {
+		//public void handleAbout(ApplicationEvent event) {
 	         //new AboutDialog(new JFrame()).show();
 	     //}
 		
 		
 		@Override
 		public void handlePreferences(ApplicationEvent arg0) {
-			JFrame preferencesFrame = new JFrame();
-			JLabel label = new JLabel("TODO");
-			preferencesFrame.add(label);
-			preferencesFrame.pack();
+			preferencesFrame = new PreferencesFrame();
 			preferencesFrame.setVisible(true);
 		}
 		
@@ -220,4 +221,62 @@ public class DjRatingTool extends Application {
 		}
 	}
 
+	private class PreferencesFrame extends JFrame {
+		private static final long serialVersionUID = 1L;
+		final Preferences preferences = Preferences.userNodeForPackage(getClass());
+		private int needleDropTime = preferences.getInt("needleDropTime", 30);
+		
+		public int getNeedleDropTime() {
+			return needleDropTime;
+		}
+
+		public int getLargeNeedleDropTime() {
+			return largeNeedleDropTime;
+		}
+
+		private int largeNeedleDropTime = preferences.getInt("largeNeedleDropTime", 60);
+
+		public PreferencesFrame() {
+			
+	        final JPanel panel = new JPanel();
+			GridLayout gridLayout = new GridLayout(3,2);
+			panel.setLayout(gridLayout);
+			
+			panel.add(new JLabel("Needle Drop time"));
+			final JTextField needleDropTimeTF = new JTextField("" + needleDropTime);
+			panel.add(needleDropTimeTF);
+			
+			panel.add(new JLabel("Large Needle Drop Time"));
+			final JTextField largeNeedleDropTimeTF = new JTextField("" + largeNeedleDropTime);
+			panel.add(largeNeedleDropTimeTF);
+			
+			JButton okButton = new JButton("Ok");
+			okButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					try {
+						needleDropTime = new Integer(needleDropTimeTF.getText());
+						preferences.putInt("needleDropTime", needleDropTime);
+					} catch (NumberFormatException nfe) {
+						// Do not update the value
+					}
+					try {
+						largeNeedleDropTime = new Integer(largeNeedleDropTimeTF.getText());
+						preferences.putInt("largeNeedleDropTime", largeNeedleDropTime);
+					} catch (NumberFormatException nfe) {
+						// Do not update the value
+					}
+					setVisible(false);
+				}});
+			JButton cancelButton = new JButton("Cancel");
+			cancelButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					setVisible(false);
+				}});
+			panel.add(okButton);
+			panel.add(cancelButton);
+
+			add(panel);
+			pack();
+		}
+	}
 }
