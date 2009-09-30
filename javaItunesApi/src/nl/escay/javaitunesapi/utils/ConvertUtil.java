@@ -47,7 +47,9 @@ public class ConvertUtil {
         	result = (Integer) parsedObject;
         } else if (parsedObject instanceof String) {
         	if ("".equals((String) parsedObject)) {
-        	    return new Integer(0);
+        	    return null;
+        	} else if ("missing value".equals((String) parsedObject)) {
+        		return null;
         	} else {
     		    result = Integer.valueOf((String) parsedObject);
         	}
@@ -73,10 +75,18 @@ public class ConvertUtil {
     	return result;
     }
 
+    /**
+     * Returns the value as int, 0 if value was not recognized.
+     * @param parsedObject
+     * @return
+     */
 	public static int asInt(Object parsedObject) {
 		Integer value = asInteger(parsedObject);
-		assert(value != null);
-		return value.intValue();
+		if (value != null) {
+		    return value.intValue();
+		} else {
+			return 0;
+		}
 	}
 
 	public static double asDouble(Object parsedObject) {
