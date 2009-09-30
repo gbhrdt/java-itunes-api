@@ -1,3 +1,22 @@
+/*
+ * Copyright 2008,2009 Ronald Martijn Morrien
+ * 
+ * This file is part of java-itunes-api.
+ *
+ * java-itunes-api is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * java-itunes-api is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with java-itunes-api. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package nl.escay.itunes.djratingtool;
 
 import java.awt.FlowLayout;
@@ -6,9 +25,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.prefs.Preferences;
 
+import javax.script.ScriptException;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.Timer;
@@ -16,6 +37,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import nl.escay.javaitunesapi.itunes.ITunesSuite;
+import nl.escay.javaitunesapi.utils.CommandUtil;
 
 import com.apple.eawt.Application;
 import com.apple.eawt.ApplicationAdapter;
@@ -38,6 +60,7 @@ public class DjRatingTool extends Application {
 	ITunesSuite iTunes;
 	private JFrame frame;
 	private PreferencesFrame preferencesFrame = new PreferencesFrame();
+	private DjRatingToolKeyListener djRatingToolKeyListener;
 	
     public static void main(String[] args) {
     	// Make menus part of OSX menu and use OSX look and feel
@@ -48,6 +71,13 @@ public class DjRatingTool extends Application {
     	// System.setProperty("com.apple.mrj.application.apple.menu.about.name", DJ_RATING_TOOL);
     	
     	new DjRatingTool();
+    	
+    	String command = "tell application \"itunes\"\n name of current track\n end tell";
+    	try {
+    		System.out.println("test: " + CommandUtil.getScriptEngine().eval(command));
+    	} catch (ScriptException ex) {
+    		ex.printStackTrace();
+    	}
     }
     
     public DjRatingTool() {
@@ -67,6 +97,8 @@ public class DjRatingTool extends Application {
 			e1.printStackTrace();
 		}
 
+		djRatingToolKeyListener = new DjRatingToolKeyListener(this);
+
 		// Start iTunes
 		getITunes();
     	
@@ -76,6 +108,7 @@ public class DjRatingTool extends Application {
         JPanel panel = new JPanel(new FlowLayout());
 
         JButton playButton = new JButton("Play");
+        playButton.addKeyListener(djRatingToolKeyListener);
         playButton.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
         		iTunes.playPause();
@@ -83,6 +116,7 @@ public class DjRatingTool extends Application {
         panel.add(playButton);
 
         JButton pauseButton = new JButton("Pause");
+        pauseButton.addKeyListener(djRatingToolKeyListener);
         pauseButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				iTunes.pause();
@@ -90,6 +124,7 @@ public class DjRatingTool extends Application {
         panel.add(pauseButton);
         
         JButton stopButton = new JButton("Stop");
+        stopButton.addKeyListener(djRatingToolKeyListener);
         stopButton.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
         		updateStatus();
@@ -97,6 +132,7 @@ public class DjRatingTool extends Application {
         panel.add(stopButton);
         
         JButton fastForwardButton = new JButton("FFWD");
+        fastForwardButton.addKeyListener(djRatingToolKeyListener);
         fastForwardButton.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
         		iTunes.fastForward();
@@ -104,6 +140,7 @@ public class DjRatingTool extends Application {
         panel.add(fastForwardButton);
         
         JButton rewindButton = new JButton("RWD");
+        rewindButton.addKeyListener(djRatingToolKeyListener);
         rewindButton.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
         		iTunes.rewind();
@@ -111,6 +148,7 @@ public class DjRatingTool extends Application {
         panel.add(rewindButton);
         
         JButton resumeButton = new JButton("Resume");
+        resumeButton.addKeyListener(djRatingToolKeyListener);
         resumeButton.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
         		iTunes.resume();
@@ -118,6 +156,7 @@ public class DjRatingTool extends Application {
         panel.add(resumeButton);
         
         JButton nextButton = new JButton("Next");
+        nextButton.addKeyListener(djRatingToolKeyListener);
         nextButton.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
         		iTunes.nextTrack();
@@ -125,6 +164,7 @@ public class DjRatingTool extends Application {
         panel.add(nextButton);
         
         JButton previousButton = new JButton("Prev");
+        previousButton.addKeyListener(djRatingToolKeyListener);
         previousButton.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
         		iTunes.previousTrack();
@@ -132,6 +172,7 @@ public class DjRatingTool extends Application {
         panel.add(previousButton);
         
         JButton needleDropBigBackwardButton = new JButton("<< Drop");
+        needleDropBigBackwardButton.addKeyListener(djRatingToolKeyListener);
         needleDropBigBackwardButton.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
         		int seconds = iTunes.getApplication().getPlayerPosition();
@@ -140,22 +181,23 @@ public class DjRatingTool extends Application {
         panel.add(needleDropBigBackwardButton);
 
         JButton needleDropBackwardButton = new JButton("< Drop");
+        needleDropBackwardButton.addKeyListener(djRatingToolKeyListener);
         needleDropBackwardButton.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
-        		int seconds = iTunes.getApplication().getPlayerPosition();
-        		iTunes.getApplication().setPlayerPosition(seconds - preferencesFrame.getNeedleDropTime());
+        		needleDropBackward();
         	}});
         panel.add(needleDropBackwardButton);
 
         JButton needleDropForwardButton = new JButton("Drop >");
+        needleDropForwardButton.addKeyListener(djRatingToolKeyListener);
         needleDropForwardButton.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
-        		int seconds = iTunes.getApplication().getPlayerPosition();
-        		iTunes.getApplication().setPlayerPosition(seconds + preferencesFrame.getNeedleDropTime());
+        		needleDropForward();
         	}});
         panel.add(needleDropForwardButton);
 
         JButton needleDropBigForwardButton = new JButton("Drop >>");
+        needleDropBigForwardButton.addKeyListener(djRatingToolKeyListener);
         needleDropBigForwardButton.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
         		int seconds = iTunes.getApplication().getPlayerPosition();
@@ -165,6 +207,11 @@ public class DjRatingTool extends Application {
 
         frame.add(panel);
         frame.pack();
+        
+        frame.setFocusable(true);
+        frame.addKeyListener(djRatingToolKeyListener);
+        
+        frame.enableInputMethods(true);
         
         // Show the frame
         frame.setVisible(true);
@@ -178,13 +225,14 @@ public class DjRatingTool extends Application {
 	}
     
     private void updateStatus() {
-    	String state = iTunes.getApplication().getPlayerState();
-    	int seconds = iTunes.getApplication().getPlayerPosition();
-    	frame.setTitle(DJ_RATING_TOOL + " - iTunes: " + 
-    			state + " (" + secondsToHHMMSS(seconds) + ")");
+//    	String state = iTunes.getApplication().getPlayerState();
+//    	String trackName = "" + getITunes().getApplication().getCurrentTrackRating();
+//    	int seconds = iTunes.getApplication().getPlayerPosition();
+//    	frame.setTitle(DJ_RATING_TOOL + " - state: " + 
+//    			state + " track: " + trackName + " (" + secondsToHHMMSS(seconds) + ")");
 	}
 
-	private ITunesSuite getITunes() {
+	protected ITunesSuite getITunes() {
     	if (iTunes == null) {
 			iTunes = new ITunesSuite();
 		    iTunes.start();	
@@ -203,11 +251,20 @@ public class DjRatingTool extends Application {
 				+ (seconds < 10 ? "0" : "") + seconds);
 	}
 	
+	protected void needleDropForward() {
+		int seconds = iTunes.getApplication().getPlayerPosition();
+		iTunes.getApplication().setPlayerPosition(seconds + preferencesFrame.getNeedleDropTime());
+	}
+
+	protected void needleDropBackward() {
+		int seconds = iTunes.getApplication().getPlayerPosition();
+		iTunes.getApplication().setPlayerPosition(seconds - preferencesFrame.getNeedleDropTime());
+	}
+
 	private class DjRatingToolApplicationAdapter extends ApplicationAdapter {
 		//public void handleAbout(ApplicationEvent event) {
 	         //new AboutDialog(new JFrame()).show();
 	     //}
-		
 		
 		@Override
 		public void handlePreferences(ApplicationEvent arg0) {
@@ -245,7 +302,6 @@ public class DjRatingTool extends Application {
 			panel.add(new JLabel("Needle Drop time"));
 			final JTextField needleDropTimeTF = new JTextField("" + needleDropTime);
 			panel.add(needleDropTimeTF);
-			
 			panel.add(new JLabel("Large Needle Drop Time"));
 			final JTextField largeNeedleDropTimeTF = new JTextField("" + largeNeedleDropTime);
 			panel.add(largeNeedleDropTimeTF);
@@ -278,5 +334,24 @@ public class DjRatingTool extends Application {
 			add(panel);
 			pack();
 		}
+	}
+
+	protected void rateStars(int i) {
+		String currentTrackName = getITunes().getApplication().getCurrentTrackName();
+		int currentRating = getITunes().getApplication().getCurrentTrackRating();
+		if (currentRating > 0) {
+			int result = JOptionPane.showConfirmDialog(null, 
+					"Do you want to override the current rating?" +
+					"\nSong: " + currentTrackName + 
+					"\nRating: " + currentRating / 20, "Override rating?", JOptionPane.YES_NO_OPTION);
+            if (JOptionPane.NO_OPTION == result) {
+            	// Do not update the rating
+            	return;
+            }
+		}
+		
+		int rating = i * 20;
+		System.out.println("Rate: " + rating + " - " + currentTrackName);
+		getITunes().getApplication().setCurrentTrackRating(rating);
 	}
 }

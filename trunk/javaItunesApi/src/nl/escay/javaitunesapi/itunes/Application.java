@@ -112,6 +112,34 @@ public class Application {
 	}
 
 	/**
+	 * Convenience method, not directly part of the api.
+	 * Should perhaps become part of the Track class.
+	 * @return The name of the current track.
+	 */
+	public String getCurrentTrackName() {
+		return ConvertUtil.asString(CommandUtil.executeCommand("get name of current track"));
+	}
+
+	/**
+	 * Convenience method, not directly part of the api.
+	 * Should perhaps become part of the Track class.
+	 * @return The rating of the current track.
+	 */
+	public int getCurrentTrackRating() {
+		return ConvertUtil.asInt(CommandUtil.executeCommand("get rating of current track"));
+	}
+
+	/**
+	 * Convenience method, not directly part of the api.
+	 * Should perhaps become part of the Track class.
+	 */
+	public void setCurrentTrackRating(int rating) {
+		CommandUtil.executeCommand("set rating of current track to " + rating);
+	}
+	
+	String command = "tell application \"itunes\"\n name of current track\n end tell";
+
+	/**
 	 * Set iTunes as the frontmost application
 	 */
 	public void setFrontMost(boolean value) {
