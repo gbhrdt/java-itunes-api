@@ -39,22 +39,27 @@ public class DjRatingToolKeyListener implements KeyListener {
 		case 49:
 			// 1
 			djRatingTool.rateStars(1);
+			additionalCommands();
 			break;
 		case 50:
 			// 2
 			djRatingTool.rateStars(2);
+			additionalCommands();
 			break;
 		case 51:
 			// 3
 			djRatingTool.rateStars(3);
+			additionalCommands();
 			break;
 		case 52:
 			// 4
 			djRatingTool.rateStars(4);
+			additionalCommands();
 			break;
 		case 53:
 			// 5
 			djRatingTool.rateStars(5);
+			additionalCommands();
 			break;
 		case 80:
 			// p
@@ -71,6 +76,31 @@ public class DjRatingToolKeyListener implements KeyListener {
 
 		default:
 			break;
+		}
+	}
+
+	boolean keepPlaying = true;
+	private void additionalCommands() {
+		if (keepPlaying) {
+			System.out.println("Keep playing");
+			djRatingTool.getITunes().play();
+			try {
+				Thread.sleep(300);
+			} catch (InterruptedException ie) {
+				// Ignore
+			}			
+			while (!"playing".equals(djRatingTool.getITunes().getApplication().getPlayerState())) {
+				// play next song (to do add enable disable preference)
+				// why? because current song will be removed from dynamic
+				// playlists
+				System.out.println("Keep playing...");
+				djRatingTool.getITunes().playPause();
+				try {
+					Thread.sleep(300);
+				} catch (InterruptedException ie) {
+					// Ignore
+				}
+			}
 		}
 	}
 

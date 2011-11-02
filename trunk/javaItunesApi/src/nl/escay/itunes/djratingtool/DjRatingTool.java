@@ -224,12 +224,15 @@ public class DjRatingTool extends Application {
 
 	}
     
+    private boolean doUpdateStatus = false; // Warning!: status updates costs a lot of script interaction
     private void updateStatus() {
-//    	String state = iTunes.getApplication().getPlayerState();
-//    	String trackName = "" + getITunes().getApplication().getCurrentTrackRating();
-//    	int seconds = iTunes.getApplication().getPlayerPosition();
-//    	frame.setTitle(DJ_RATING_TOOL + " - state: " + 
-//    			state + " track: " + trackName + " (" + secondsToHHMMSS(seconds) + ")");
+    	if (doUpdateStatus) {
+	    	String state = iTunes.getApplication().getPlayerState();
+	    	String trackName = "" + getITunes().getApplication().getCurrentTrackName();
+	    	int seconds = iTunes.getApplication().getPlayerPosition();
+	    	frame.setTitle(DJ_RATING_TOOL + " - state: " + 
+	    			state + " track: " + trackName + " (" + secondsToHHMMSS(seconds) + ")");
+    	}
 	}
 
 	protected ITunesSuite getITunes() {
